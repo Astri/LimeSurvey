@@ -263,8 +263,8 @@ class tokens extends Survey_Common_Action
             self::_newtokentable($iSurveyId);
         }
         // Javascript
-        $this->getController()->_js_admin_includes(Yii::app()->getConfig('generalscripts') . "admin/tokens.js");
-        $this->getController()->_js_admin_includes(Yii::app()->getConfig('generalscripts') . "admin/tokentocpdb.js");
+        $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . "tokens.js");
+        $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . "tokentocpdb.js");
         $this->getController()->_js_admin_includes(Yii::app()->getConfig('generalscripts') . "jquery/jquery.multiselect.min.js");
         $this->getController()->_js_admin_includes(Yii::app()->getConfig('generalscripts') . "jquery/jqGrid/js/i18n/grid.locale-en.js");
         $this->getController()->_js_admin_includes(Yii::app()->getConfig('generalscripts') . "jquery/jqGrid/js/jquery.jqGrid.min.js");
@@ -690,7 +690,7 @@ class tokens extends Survey_Common_Action
             }
             else
             {
-                $datetimeobj = new Date_Time_Converter(array(trim(Yii::app()->request->getPost('validfrom')), $dateformatdetails['phpdate'] . ' H:i'));
+                $datetimeobj = new Date_Time_Converter(trim(Yii::app()->request->getPost('validfrom')), $dateformatdetails['phpdate'] . ' H:i');
                 $validfrom = $datetimeobj->convert('Y-m-d H:i:s');
             }
             if (trim(Yii::app()->request->getPost('validuntil')) == '')
@@ -699,7 +699,7 @@ class tokens extends Survey_Common_Action
             }
             else
             {
-                $datetimeobj = new Date_Time_Converter(array(trim(Yii::app()->request->getPost('validuntil')), $dateformatdetails['phpdate'] . ' H:i'));
+                $datetimeobj = new Date_Time_Converter(trim(Yii::app()->request->getPost('validuntil')), $dateformatdetails['phpdate'] . ' H:i');
                 $validuntil = $datetimeobj->convert('Y-m-d H:i:s');
             }
 
@@ -810,7 +810,7 @@ class tokens extends Survey_Common_Action
             }
             else
             {
-                $datetimeobj = new Date_Time_Converter(array(trim(Yii::app()->request->getPost('validfrom')), $dateformatdetails['phpdate'] . ' H:i'));
+                $datetimeobj = new Date_Time_Converter(trim(Yii::app()->request->getPost('validfrom')), $dateformatdetails['phpdate'] . ' H:i');
                 $_POST['validfrom'] = $datetimeobj->convert('Y-m-d H:i:s');
             }
             if (trim(Yii::app()->request->getPost('validuntil')) == '')
@@ -819,7 +819,7 @@ class tokens extends Survey_Common_Action
             }
             else
             {
-                $datetimeobj = new Date_Time_Converter(array(trim(Yii::app()->request->getPost('validuntil')), $dateformatdetails['phpdate'] . ' H:i'));
+                $datetimeobj = new Date_Time_Converter(trim(Yii::app()->request->getPost('validuntil')), $dateformatdetails['phpdate'] . ' H:i');
                 $_POST['validuntil'] = $datetimeobj->convert('Y-m-d H:i:s');
             }
 
@@ -946,7 +946,7 @@ class tokens extends Survey_Common_Action
             }
             else
             {
-                $datetimeobj = new Date_Time_Converter(array(trim(Yii::app()->request->getPost('validfrom')), $dateformatdetails['phpdate'] . ' H:i'));
+                $datetimeobj = new Date_Time_Converter(trim(Yii::app()->request->getPost('validfrom')), $dateformatdetails['phpdate'] . ' H:i');
                 $_POST['validfrom'] = $datetimeobj->convert('Y-m-d H:i:s');
             }
             if (trim(Yii::app()->request->getPost('validuntil')) == '')
@@ -955,7 +955,7 @@ class tokens extends Survey_Common_Action
             }
             else
             {
-                $datetimeobj = new Date_Time_Converter(array(trim(Yii::app()->request->getPost('validuntil')), $dateformatdetails['phpdate'] . ' H:i'));
+                $datetimeobj = new Date_Time_Converter(trim(Yii::app()->request->getPost('validuntil')), $dateformatdetails['phpdate'] . ' H:i');
                 $_POST['validuntil'] = $datetimeobj->convert('Y-m-d H:i:s');
             }
 
@@ -1798,7 +1798,7 @@ class tokens extends Survey_Common_Action
             die('access denied');
         }
 
-        $this->getController()->_js_admin_includes('scripts/tokens.js');
+        $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . 'tokens.js');
 
         $aEncodings = array(
         "armscii8" => $clang->gT("ARMSCII-8 Armenian")

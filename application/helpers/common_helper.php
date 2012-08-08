@@ -2184,7 +2184,7 @@ function validateTemplateDir($sTemplateName)
 	$aAdditionalLanguages = array_filter(explode(" ", $oSurvey->additional_languages));
 	if (is_null($sLanguage)|| !in_array($sLanguage,$aAdditionalLanguages))
 		$sLanguage = $oSurvey->language;
-		
+
 	switch ($flt['type'])
 		    {
 		        case "K": // Multiple Numerical
@@ -2287,7 +2287,7 @@ function validateTemplateDir($sTemplateName)
 
 		} //end switch
  }
- 
+
 return $allfields;
 
 }
@@ -4223,6 +4223,7 @@ function questionAttributes($returnByName=false)
     'category'=>$clang->gT('Input'),
     'sortorder'=>100,
     "inputtype"=>"integer",
+    'default'=>1,
     "help"=>$clang->gT("Minute step interval when using select boxes"),
     "caption"=>$clang->gT("Minute step interval"));
 
@@ -5570,7 +5571,7 @@ function useFirebug()
 function convertDateTimeFormat($value, $fromdateformat, $todateformat)
 {
     Yii::import('application.libraries.Date_Time_Converter', true);
-    $date = new Date_Time_Converter(array($value, $fromdateformat));
+    $date = new Date_Time_Converter($value, $fromdateformat);
     return $date->convert($todateformat);
 }
 
@@ -7324,8 +7325,8 @@ function getPrintableHeader()
     global $rooturl,$homeurl;
     $headelements = '
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="'.$rooturl.'/scripts/jquery/jquery.js"></script>
-    <script type="text/javascript" src="'.$homeurl.'/scripts/printablesurvey.js"></script>
+    <script type="text/javascript" src="'.Yii::app()->getConfig('generalscripts').'jquery/jquery.js"></script>
+    <script type="text/javascript" src="'.Yii::app()->getConfig('adminscripts').'printablesurvey.js"></script>
     ';
     return $headelements;
 }
