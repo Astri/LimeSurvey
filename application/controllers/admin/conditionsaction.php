@@ -1233,7 +1233,7 @@ class conditionsaction extends Survey_Common_Action {
                         $img_tag = CHtml::image($imageurl.'/scenario_edit.png', $clang->gT("Edit scenario"), array(
                         'name'=>'DeleteWholeGroup'
                         ));
-                        $additional_main_content = CHtml::link($img_tag, '#', array(
+                        $additional_main_content .= CHtml::link($img_tag, '#', array(
                         'id' 		=> 	'editscenariobtn'.$scenarionr['scenario'],
                         'onclick' 	=> 	"$('#editscenario{$scenarionr['scenario']}').toggle('slow');"
                         ));
@@ -2051,7 +2051,7 @@ class conditionsaction extends Survey_Common_Action {
     {
         global $max;
         $clang = Yii::app()->lang;
-        $imageurl = Yii::app()->getConfig("imageurl");
+        $imageurl = Yii::app()->getConfig("adminimageurl");
 
         if(!isset($max))
         {
