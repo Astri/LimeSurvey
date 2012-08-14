@@ -26,7 +26,7 @@
     }
     ?>
     <?php
-
+	
         if ($bIsRTL){?>
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->getConfig('adminstyleurl');?>adminstyle-rtl.css" /><?php
         }

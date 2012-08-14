@@ -1,0 +1,50 @@
+label.error.required {
+    background-color: #ffffff;
+	color: #BD4247;
+}
+
+select.error {
+    background-color: #ffffff;
+	color: #BD4247;
+}
+
+div.errorSummary p {
+    color: #BD4247;
+    background-color: #EDDBE3;
+    text-align: "left";
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+p.note {
+    font-weight: bold;
+    text-align: left;
+}
+
+div.errorSummary ul {
+    color: #BD4247;
+    background-color: #EDDBE3;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+div.errorSummary ul li {
+    list-style-type: disc;
+    list-style-position: outside;
+}
+
+.resultfilters {
+	width: 97.5%;
+	border: 1px solid #85BD00;
+	margin-bottom: 20px;
+	padding-top: 20px;
+	padding-left: 20px;
+}
+
+.podesoutput {
+	padding: 20%;
+}
+
+span.help-block.error {
+    background-color: #ffffff;
+}
