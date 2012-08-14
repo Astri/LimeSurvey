@@ -26,6 +26,13 @@
  * @property MainPotensiR7[] $mainPotensiR7s9
  * @property MainPotensiR7[] $mainPotensiR7s10
  * @property MainPotensiR7[] $mainPotensiR7s11
+ * @property MainPotensiR7[] $mainPotensiR7s12
+ * @property MainPotensiR7[] $mainPotensiR7s13
+ * @property MainPotensiR7[] $mainPotensiR7s14
+ * @property MainPotensiR7[] $mainPotensiR7s15
+ * @property MainPotensiR7[] $mainPotensiR7s16
+ * @property MainPotensiR7[] $mainPotensiR7s17
+ * @property MainPotensiR7[] $mainPotensiR7s18
  */
 class KeteranganAdaTidak extends CActiveRecord
 {
@@ -83,13 +90,20 @@ class KeteranganAdaTidak extends CActiveRecord
 			'mainPotensiR7s2' => array(self::HAS_MANY, 'MainPotensiR7', 'R704KK2'),
 			'mainPotensiR7s3' => array(self::HAS_MANY, 'MainPotensiR7', 'R704LK2'),
 			'mainPotensiR7s4' => array(self::HAS_MANY, 'MainPotensiR7', 'R704AK2'),
-			'mainPotensiR7s5' => array(self::HAS_MANY, 'MainPotensiR7', 'R704BK2'),
-			'mainPotensiR7s6' => array(self::HAS_MANY, 'MainPotensiR7', 'R704CK2'),
-			'mainPotensiR7s7' => array(self::HAS_MANY, 'MainPotensiR7', 'R704DK2'),
-			'mainPotensiR7s8' => array(self::HAS_MANY, 'MainPotensiR7', 'R704EK2'),
-			'mainPotensiR7s9' => array(self::HAS_MANY, 'MainPotensiR7', 'R704FK2'),
-			'mainPotensiR7s10' => array(self::HAS_MANY, 'MainPotensiR7', 'R704GK2'),
-			'mainPotensiR7s11' => array(self::HAS_MANY, 'MainPotensiR7', 'R704HK2'),
+			'mainPotensiR7s5' => array(self::HAS_MANY, 'MainPotensiR7', 'R708AK2'),
+			'mainPotensiR7s6' => array(self::HAS_MANY, 'MainPotensiR7', 'R708BK2'),
+			'mainPotensiR7s7' => array(self::HAS_MANY, 'MainPotensiR7', 'R708CK2'),
+			'mainPotensiR7s8' => array(self::HAS_MANY, 'MainPotensiR7', 'R704BK2'),
+			'mainPotensiR7s9' => array(self::HAS_MANY, 'MainPotensiR7', 'R708DK2'),
+			'mainPotensiR7s10' => array(self::HAS_MANY, 'MainPotensiR7', 'R708EK2'),
+			'mainPotensiR7s11' => array(self::HAS_MANY, 'MainPotensiR7', 'R708FK2'),
+			'mainPotensiR7s12' => array(self::HAS_MANY, 'MainPotensiR7', 'R708GK2'),
+			'mainPotensiR7s13' => array(self::HAS_MANY, 'MainPotensiR7', 'R704CK2'),
+			'mainPotensiR7s14' => array(self::HAS_MANY, 'MainPotensiR7', 'R704DK2'),
+			'mainPotensiR7s15' => array(self::HAS_MANY, 'MainPotensiR7', 'R704EK2'),
+			'mainPotensiR7s16' => array(self::HAS_MANY, 'MainPotensiR7', 'R704FK2'),
+			'mainPotensiR7s17' => array(self::HAS_MANY, 'MainPotensiR7', 'R704GK2'),
+			'mainPotensiR7s18' => array(self::HAS_MANY, 'MainPotensiR7', 'R704HK2'),
 		);
 	}
 

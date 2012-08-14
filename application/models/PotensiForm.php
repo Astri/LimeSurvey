@@ -14,6 +14,7 @@ class PotensiForm extends CFormModel {
 	public $kat9;
 	public $kat10;
 	public $kat12;
+	//public $outputtype;
 	
 	public function rules()
 	{
@@ -44,6 +45,7 @@ class PotensiForm extends CFormModel {
 			'kat9'=>'IX. Hiburan dan Olah Raga',
 			'kat10'=>'X. Angkutan, Komunikasi dan Informasi',
 			'kat12'=>'XII. Penggunaan Lahan',
+			//'outputtype'=>'Output format'
 		);
 	}
 	

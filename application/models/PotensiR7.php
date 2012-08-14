@@ -117,6 +117,7 @@
  * @property string $R713E
  *
  * The followings are the available model relations:
+ * @property KeteranganR713e $r713E
  * @property Desa $dESA
  * @property KeteranganAdaTidak $r704IK2
  * @property KeteranganAdaTidak $r704JK2
@@ -124,8 +125,26 @@
  * @property KeteranganAdaTidak $r704LK2
  * @property KeteranganR713a $r713A
  * @property KeteranganAdaTidakada $r713D
+ * @property KeteranganR704xxx $r704AK5
+ * @property KeteranganR704xxx $r704BK5
+ * @property KeteranganR704xxx $r704CK5
+ * @property KeteranganR704xxx $r704DK5
  * @property KeteranganAdaTidak $r704AK2
+ * @property KeteranganR704xxx $r704EK5
+ * @property KeteranganR704xxx $r704FK5
+ * @property KeteranganR704xxx $r704GK5
+ * @property KeteranganR704xxx $r704HK5
+ * @property KeteranganR704xxx $r704IK5
+ * @property KeteranganR704xxx $r704KK5
+ * @property KeteranganR704xxx $r704LK5
+ * @property KeteranganAdaTidak $r708AK2
+ * @property KeteranganAdaTidak $r708BK2
+ * @property KeteranganAdaTidak $r708CK2
  * @property KeteranganAdaTidak $r704BK2
+ * @property KeteranganAdaTidak $r708DK2
+ * @property KeteranganAdaTidak $r708EK2
+ * @property KeteranganAdaTidak $r708FK2
+ * @property KeteranganAdaTidak $r708GK2
  * @property KeteranganAdaTidak $r704CK2
  * @property KeteranganAdaTidak $r704DK2
  * @property KeteranganAdaTidak $r704EK2
@@ -181,6 +200,7 @@ class PotensiR7 extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'r713E' => array(self::BELONGS_TO, 'KeteranganR713e', 'R713E'),
 			'dESA' => array(self::BELONGS_TO, 'Desa', 'DESAID'),
 			'r704IK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704IK2'),
 			'r704JK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704JK2'),
@@ -188,8 +208,26 @@ class PotensiR7 extends CActiveRecord
 			'r704LK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704LK2'),
 			'r713A' => array(self::BELONGS_TO, 'KeteranganR713a', 'R713A'),
 			'r713D' => array(self::BELONGS_TO, 'KeteranganAdaTidakada', 'R713D'),
+			'r704AK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704AK5'),
+			'r704BK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704BK5'),
+			'r704CK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704CK5'),
+			'r704DK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704DK5'),
 			'r704AK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704AK2'),
+			'r704EK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704EK5'),
+			'r704FK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704FK5'),
+			'r704GK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704GK5'),
+			'r704HK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704HK5'),
+			'r704IK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704IK5'),
+			'r704KK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704KK5'),
+			'r704LK5' => array(self::BELONGS_TO, 'KeteranganR704xxx', 'R704LK5'),
+			'r708AK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R708AK2'),
+			'r708BK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R708BK2'),
+			'r708CK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R708CK2'),
 			'r704BK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704BK2'),
+			'r708DK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R708DK2'),
+			'r708EK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R708EK2'),
+			'r708FK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R708FK2'),
+			'r708GK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R708GK2'),
 			'r704CK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704CK2'),
 			'r704DK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704DK2'),
 			'r704EK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R704EK2'),
@@ -231,48 +269,48 @@ class PotensiR7 extends CActiveRecord
 			'R704AK2' => 'Apakah ada Rumah Sakit',
 			'R704AK3' => 'Jumlah rumah sakit',
 			'R704AK4' => 'Jarak ke rumah sakit terdekat (km)',
-			'R704AK5' => 'R704 Ak5',
+			'R704AK5' => 'Kemudah untuk mencapai rumah sakit',
 			'R704BK2' => 'Apakah ada Rumah Sakit bersalin',
 			'R704BK3' => 'Jumlah rumah sakit bersalin',
 			'R704BK4' => 'Jarak ke rumah sakit bersalin terdekat (km)',
-			'R704BK5' => 'R704 Bk5',
+			'R704BK5' => 'Kemudah untuk mencapai rumah sakit bersalin',
 			'R704CK2' => 'Apakah ada poliklinik/balai pengobatan',
 			'R704CK3' => 'Jumlah poliklinik/balai pengobatan',
 			'R704CK4' => 'Jarak ke poliklinik/balai pengobatan terdekat (km)',
-			'R704CK5' => 'R704 Ck5',
+			'R704CK5' => 'Kemudah untuk mencapai poliklinik/balai pengobatan',
 			'R704DK2' => 'Apakah ada puskesmas',
 			'R704DK3' => 'Jumlah puskesmas',
 			'R704DK4' => 'Jarak ke puskesmas terdekat (km)',
-			'R704DK5' => 'R704 Dk5',
+			'R704DK5' => 'Kemudah untuk mencapai puskesmas',
 			'R704EK2' => 'Apakah ada puskesmas pembantu',
 			'R704EK3' => 'Jumlah puskesmas pembantu (km)',
 			'R704EK4' => 'Jarak ke puskesmas pembantu terdekat (km)',
-			'R704EK5' => 'R704 Ek5',
+			'R704EK5' => 'Kemudah untuk mencapai puskesmas pembantu',
 			'R704FK2' => 'Apakah ada tempat praktek dokter',
 			'R704FK3' => 'Jumlah tempat praktek dokter',
 			'R704FK4' => 'Jarak ke tempat praktek dokter terdekat (km)',
-			'R704FK5' => 'R704 Fk5',
+			'R704FK5' => 'Kemudah untuk mencapai tempat praktek dokter',
 			'R704GK2' => 'Apakah ada tempat praktek bidan',
 			'R704GK3' => 'Jumlah tempat praktek bidan',
 			'R704GK4' => 'Jarak ke tempat praktek bidan terdekat (km)',
-			'R704GK5' => 'R704 Gk5',
+			'R704GK5' => 'Kemudah untuk mencapai tempat praktek bidan',
 			'R704HK2' => 'Apakah ada poskesdes',
 			'R704HK3' => 'Jumlah poskesdes',
 			'R704HK4' => 'Jarak ke poskesdes terdekat (km)',
-			'R704HK5' => 'R704 Hk5',
+			'R704HK5' => 'Kemudah untuk mencapai poskesdes',
 			'R704IK2' => 'Apakah ada polindes',
 			'R704IK3' => 'Jumlah polindes',
 			'R704IK4' => 'Jarak ke polindes terdekat (km)',
-			'R704IK5' => 'R704 Ik5',
+			'R704IK5' => 'Kemudah untuk mencapai polindes',
 			'R704JK2' => 'Apakah ada posyandu',
 			'R704JK3' => 'Jumlah posyandu',
 			'R704KK2' => 'Apakah ada apotek',
 			'R704KK3' => 'Jumlah apotek',
 			'R704KK4' => 'Jarak ke apotek terdekat (km)',
-			'R704KK5' => 'R704 Kk5',
+			'R704KK5' => 'Kemudah untuk mencapai polindes',
 			'R704LK2' => 'Apakah ada toko khusus obat/jamu',
 			'R704LK4' => 'Jarak ke toko khusus obat/jamu terdekat (km)',
-			'R704LK5' => 'R704 Lk5',
+			'R704LK5' => 'Kemudah untuk mencapai ke toko khusus obat/jamu',
 			'R705A' => 'R705 A',
 			'R705B' => 'R705 B',
 			'R705C' => 'R705 C',
@@ -286,36 +324,36 @@ class PotensiR7 extends CActiveRecord
 			'R707C' => 'Jumlah bidan yang tinggal di desa/kelurahan',
 			'R707D' => 'Jumlah tenaga kesehatan lainnya yang tinggal di desa/kelurahan',
 			'R707E' => 'Jumlah dukun bayi yang tinggal di desa/kelurahan',
-			'R708AK2' => 'R708 Ak2',
-			'R708AK3' => 'R708 Ak3',
-			'R708AK4' => 'R708 Ak4',
-			'R708BK2' => 'R708 Bk2',
-			'R708BK3' => 'R708 Bk3',
-			'R708BK4' => 'R708 Bk4',
-			'R708CK2' => 'R708 Ck2',
-			'R708CK3' => 'R708 Ck3',
-			'R708CK4' => 'R708 Ck4',
-			'R708DK2' => 'R708 Dk2',
-			'R708DK3' => 'R708 Dk3',
-			'R708DK4' => 'R708 Dk4',
-			'R708EK2' => 'R708 Ek2',
-			'R708EK3' => 'R708 Ek3',
-			'R708EK4' => 'R708 Ek4',
-			'R708FK2' => 'R708 Fk2',
-			'R708FK3' => 'R708 Fk3',
-			'R708FK4' => 'R708 Fk4',
-			'R708GK2' => 'R708 Gk2',
-			'R708GK3' => 'R708 Gk3',
-			'R708GK4' => 'R708 Gk4',
+			'R708AK2' => 'Apakah ada kasus Muntaber selama setahun terakhir',
+			'R708AK3' => 'Jumlah penderita kasus Muntaber',
+			'R708AK4' => 'Jumlah penderita yang meninggal karena Muntaber',
+			'R708BK2' => 'Apakah ada kasus Demam Berdarah selama setahun terakhir',
+			'R708BK3' => 'Jumlah penderita kasus Demam Berdarah',
+			'R708BK4' => 'Jumlah penderita yang meninggal karena Demam Berdarah',
+			'R708CK2' => 'Apakah ada kasus Campak selama setahun terakhir',
+			'R708CK3' => 'Jumlah penderita Campak',
+			'R708CK4' => 'Jumlah penderita yang meninggal karena Campak',
+			'R708DK2' => 'Apakah ada kasus Infeksi Saluran Pernapasan Akut (ISPA)  selama setahun terakhir',
+			'R708DK3' => 'Jumlah penderita kasus Infeksi Saluran Pernapasan Akut (ISPA)',
+			'R708DK4' => 'Jumlah penderita yang meninggal karena Infeksi Saluran Pernapasan Akut (ISPA)',
+			'R708EK2' => 'Apakah ada kasus Flu Burung selama setahun terakhir',
+			'R708EK3' => 'Jumlah penderita kasus Flu Burung',
+			'R708EK4' => 'Jumlah penderita yang meninggal karena Flu Burung',
+			'R708FK2' => 'Apakah ada kasus Tuberculose (TB) selama setahun terakhir',
+			'R708FK3' => 'Jumlah penderita kasus Tuberculose (TB)',
+			'R708FK4' => 'Jumlah penderita yang meninggal karena Tuberculose (TB)',
+			'R708GK2' => 'Apakah ada kasus Lainnya selama setahun terakhir',
+			'R708GK3' => 'Jumlah penderita kasus Lainnya',
+			'R708GK4' => 'Jumlah penderita yang meninggal karena Lainnya',
 			'R708HK2' => 'R708 Hk2',
 			'R708HK3' => 'R708 Hk3',
 			'R708HK4' => 'R708 Hk4',
-			'R709' => 'R709',
+			'R709' => 'Jumlah penderita gizi buruk selama 3 tahun terakhir',
 			'R713A' => 'Sumber air untuk minum/memasak sebagian besar keluarga berasal dari',
-			'R713B' => 'R713 B',
+			'R713B' => 'Jenis penggunaan fasilitas (instalasi) air minum',
 			'R713C' => 'Waktu tempuh ke sumber air (menit PP)',
 			'R713D' => 'Apakah ada keluarga di desa/kelurahan ini membeli air untuk mi-num/memasak',
-			'R713E' => 'R713 E',
+			'R713E' => 'Cara membeli air untuk minum/memasak',
 		);
 	}
 

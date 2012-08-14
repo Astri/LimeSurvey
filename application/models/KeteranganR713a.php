@@ -8,7 +8,7 @@
  * @property string $nama
  *
  * The followings are the available model relations:
- * @property PotensiR7[] $potensiR7s
+ * @property MainPotensiR7[] $mainPotensiR7s
  */
 class KeteranganR713a extends CActiveRecord
 {
@@ -55,7 +55,7 @@ class KeteranganR713a extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'potensiR7s' => array(self::HAS_MANY, 'PotensiR7', 'R713A'),
+			'mainPotensiR7s' => array(self::HAS_MANY, 'MainPotensiR7', 'R713A'),
 		);
 	}
 

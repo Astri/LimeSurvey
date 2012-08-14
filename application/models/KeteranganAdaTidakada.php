@@ -12,6 +12,20 @@
  * @property MainPotensiR3[] $mainPotensiR3s
  * @property MainPotensiR5[] $mainPotensiR5s
  * @property MainPotensiR5[] $mainPotensiR5s1
+ * @property MainPotensiR6[] $mainPotensiR6s
+ * @property MainPotensiR6[] $mainPotensiR6s1
+ * @property MainPotensiR6[] $mainPotensiR6s2
+ * @property MainPotensiR6[] $mainPotensiR6s3
+ * @property MainPotensiR6[] $mainPotensiR6s4
+ * @property MainPotensiR6[] $mainPotensiR6s5
+ * @property MainPotensiR6[] $mainPotensiR6s6
+ * @property MainPotensiR6[] $mainPotensiR6s7
+ * @property MainPotensiR6[] $mainPotensiR6s8
+ * @property MainPotensiR6[] $mainPotensiR6s9
+ * @property MainPotensiR6[] $mainPotensiR6s10
+ * @property MainPotensiR6[] $mainPotensiR6s11
+ * @property MainPotensiR6[] $mainPotensiR6s12
+ * @property MainPotensiR6[] $mainPotensiR6s13
  * @property MainPotensiR7[] $mainPotensiR7s
  * @property MainPotensiR9[] $mainPotensiR9s
  * @property MainPotensiR9[] $mainPotensiR9s1
@@ -69,6 +83,20 @@ class KeteranganAdaTidakada extends CActiveRecord
 			'mainPotensiR3s' => array(self::HAS_MANY, 'MainPotensiR3', 'R305E3'),
 			'mainPotensiR5s' => array(self::HAS_MANY, 'MainPotensiR5', 'R510A'),
 			'mainPotensiR5s1' => array(self::HAS_MANY, 'MainPotensiR5', 'R505B'),
+			'mainPotensiR6s' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B1'),
+			'mainPotensiR6s1' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B2'),
+			'mainPotensiR6s2' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B3'),
+			'mainPotensiR6s3' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B4'),
+			'mainPotensiR6s4' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B5'),
+			'mainPotensiR6s5' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B6'),
+			'mainPotensiR6s6' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B7'),
+			'mainPotensiR6s7' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B8'),
+			'mainPotensiR6s8' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B9'),
+			'mainPotensiR6s9' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B10'),
+			'mainPotensiR6s10' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B11'),
+			'mainPotensiR6s11' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B12'),
+			'mainPotensiR6s12' => array(self::HAS_MANY, 'MainPotensiR6', 'R603B13'),
+			'mainPotensiR6s13' => array(self::HAS_MANY, 'MainPotensiR6', 'R603A5'),
 			'mainPotensiR7s' => array(self::HAS_MANY, 'MainPotensiR7', 'R713D'),
 			'mainPotensiR9s' => array(self::HAS_MANY, 'MainPotensiR9', 'R903AK2'),
 			'mainPotensiR9s1' => array(self::HAS_MANY, 'MainPotensiR9', 'R903BK2'),

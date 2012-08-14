@@ -7,6 +7,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @subpackage controllers
  */
 class PotensiController extends CController {	
+	
 	public function run($action = 'index')
     {
         switch ($action) {

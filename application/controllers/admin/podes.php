@@ -41,9 +41,16 @@ class Podes extends Survey_Common_Action
     
     /**
     * This function show form to select location for podes    
+	* TODO: Add Permission
+	*       Add link from admin page
+	*       Add menu bar
     */
     function index()
     {
+		// Load podes helper function
+		Yii::app()->loadHelper('admin/podes');
+		$output = false;
+		
         /* if (!hasGlobalPermission('USER_RIGHT_CREATE_SURVEY'))
             $this->getController()->error('No permission'); */                      		
 		$model=new PotensiForm;
@@ -58,34 +65,108 @@ class Podes extends Survey_Common_Action
 
 		if(isset($_POST['PotensiForm']))
 		{
-                        echo print_r($_POST['PotensiForm']);
-			/* $model->attributes=$_POST['PotensiForm'];
+            
+			$model->attributes=$_POST['PotensiForm'];
+			if($model->validate())
+			{		
+				$output = array(
+					'id'=>$model->desaid,
+					'kat3'=>$model->kat3,
+					'kat4'=>$model->kat4,
+					'kat5'=>$model->kat5,
+					'kat6'=>$model->kat6,
+					'kat7'=>$model->kat7,
+					'kat8'=>$model->kat8,
+					'kat9'=>$model->kat9,
+					'kat10'=>$model->kat10,
+					'kat12'=>$model->kat12,					
+				);
+			}
+		}
+		
+		// Load Podes css and JS
+		$this->getController()->_css_admin_includes(Yii::app()->getConfig('adminstyleurl')."podes.css");
+        $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . 'podes.js');
+		//$aData['display']['menu_bars']['browse'] = "Quick statistics";        
+		
+        $aData['model'] = $model;
+		$aData['output'] = $output;
+        $this->_renderWrappedTemplate('podes', 'index', $aData);
+    }
+	
+	/**
+	* Compare podes data from different village
+	* TODO: Add Permission
+	*       Add link from podes page
+	*       Add menu bar
+	*/
+	function compare() {
+		// Load podes helper function
+		Yii::app()->loadHelper('admin/podes');
+		$model = new CompareForm;
+		$output = false;
+		
+		if(isset($_POST['ajax']) && $_POST['ajax']==='potensi-form-Index-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+		if(isset($_POST['CompareForm']))
+		{
+			$model->attributes=$_POST['CompareForm'];
+			
 			if($model->validate())
 			{
-				//echo $model['provinsiid'];
-				$this->render('view',array(
-					'id'=>$model['desaid'],
-					'kat3'=>$model['kat3'],
-					'kat4'=>$model['kat4'],
-					'kat5'=>$model['kat5'],
-					'kat6'=>$model['kat6'],
-					'kat7'=>$model['kat7'],
-					'kat8'=>$model['kat8'],
-					'kat9'=>$model['kat9'],
-					'kat10'=>$model['kat10'],
-					'kat12'=>$model['kat12'],
-				));
-				return;
-			} */
-		}		
+				$desaids = array();
+			
+				$desaid1 = $_POST['CompareForm']['desaid1'];
+				if (array_key_exists('desaid2', $_POST['CompareForm']))
+					$desaid2 = $_POST['CompareForm']['desaid2'];
+				if (array_key_exists('desaid3', $_POST['CompareForm']))
+					$desaid3 = $_POST['CompareForm']['desaid3'];
+				
+				if($desaid1) {
+					foreach ($desaid1 as $id)
+						if ($id)
+							array_push($desaids, $id);
+				}
+				
+				if(isset($desaid2) && $desaid2) {
+					foreach ($desaid2 as $id)
+						if ($id)
+							array_push($desaids, $id);
+				}
+				
+				if(isset($desaid3) && $desaid3) {
+					foreach ($desaid3 as $id)
+						if ($id)
+							array_push($desaids, $id);
+				}
+				
+				$output = array(
+					'desaids'=>$desaids,
+					'kat3'=>$model->kat3,
+					'kat4'=>$model->kat4,
+					'kat5'=>$model->kat5,
+					'kat6'=>$model->kat6,
+					'kat7'=>$model->kat7,
+					'kat8'=>$model->kat8,
+					'kat9'=>$model->kat9,
+					'kat10'=>$model->kat10,
+					'kat12'=>$model->kat12,					
+				);				
+			}
+		}
+
+		// Load Podes css and JS
+		$this->getController()->_css_admin_includes(Yii::app()->getConfig('adminstyleurl')."podes.css");
+        $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . 'podes.js');
 		
-                $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . 'podes.js');
-		//$aData['display']['menu_bars']['browse'] = "Quick statistics";
-                
-                $aData['model'] = $model;
-        $this->_renderWrappedTemplate('podes', 'index_view', $aData);
-    }
-    
+		$aData['model'] = $model;
+		$aData['output'] = $output;
+		$this->_renderWrappedTemplate('podes', 'compare', $aData);
+	}
+	
     /**
     * Renders template(s) wrapped in header and footer
     *
@@ -95,29 +176,9 @@ class Podes extends Survey_Common_Action
     */
     protected function _renderWrappedTemplate($sAction = 'podes', $aViewUrls = array(), $aData = array())
     {
+		
         //$this->getController()->_css_admin_includes(Yii::app()->getConfig('adminstyleurl')."superfish.css");
         $aData['display']['menu_bars'] = false;
         parent::_renderWrappedTemplate($sAction, $aViewUrls, $aData);
-    }
-    
-    /**
-    * Fungsi untuk mengambil data kabupaten dari Ajax berdasarkan ID provinsi
-    */
-    function getkabupaten(){
-        /*if(!Yii::app()->request->isAjaxRequest)
-               throw new CHttpException(404); */
-
-        $data=Kabupaten::model()->findAll(
-                'provinsiid=:provinsiid',
-                array(':provinsiid'=>(int)$_POST['provinsiid'])                
-        );
-
-        $data=CHtml::listData($data, 'id', 'nama');        
-        foreach ($data as $value=>$nama)
-        {
-            echo CHtml::tag('option',array('value'=>$value), CHtml::encode($nama), true);                        
-            //echo '< option value="'.$value.'" selected="'.$nama.'">< /option>';
-            
-        }
     }
 }

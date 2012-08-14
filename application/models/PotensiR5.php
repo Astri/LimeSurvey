@@ -42,7 +42,8 @@
  * @property string $R511BK3
  * @property string $R511BK4
  *
- * The followings are the available model relations:
+* The followings are the available model relations:
+ * @property KeteranganYaTidak $r511BK4
  * @property Desa $dESA
  * @property KeteranganYaTidak $r506B2K2
  * @property KeteranganYaTidak $r506B1K3
@@ -57,7 +58,16 @@
  * @property KeteranganR504 $r504
  * @property KeteranganAdaTidak $r511BK2
  * @property KeteranganR511bk3 $r511BK3
+ * @property KeteranganYaTidak $r506B3K2
+ * @property KeteranganYaTidak $r506B4K2
+ * @property KeteranganYaTidak $r506B5K2
+ * @property KeteranganYaTidak $r506B3K3
+ * @property KeteranganYaTidak $r506B3K4
+ * @property KeteranganYaTidak $r506B4K3
+ * @property KeteranganYaTidak $r506B4K4
+ * @property KeteranganYaTidak $r506B5K4
  * @property KeteranganR505a $r505A
+ * @property KeteranganYaTidak $r511AK4
  * @property KeteranganAdaTidakada $r505B
  * @property KeteranganAdaTidak $r506AK2
  * @property KeteranganAdaTidak $r506AK3
@@ -110,6 +120,7 @@ class PotensiR5 extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'r511BK4' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R511BK4'),
 			'dESA' => array(self::BELONGS_TO, 'Desa', 'DESAID'),
 			'r506B2K2' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B2K2'),
 			'r506B1K3' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B1K3'),
@@ -124,7 +135,16 @@ class PotensiR5 extends CActiveRecord
 			'r504' => array(self::BELONGS_TO, 'KeteranganR504', 'R504'),
 			'r511BK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R511BK2'),
 			'r511BK3' => array(self::BELONGS_TO, 'KeteranganR511bk3', 'R511BK3'),
+			'r506B3K2' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B3K2'),
+			'r506B4K2' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B4K2'),
+			'r506B5K2' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B5K2'),
+			'r506B3K3' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B3K3'),
+			'r506B3K4' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B3K4'),
+			'r506B4K3' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B4K3'),
+			'r506B4K4' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B4K4'),
+			'r506B5K4' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R506B5K4'),
 			'r505A' => array(self::BELONGS_TO, 'KeteranganR505a', 'R505A'),
+			'r511AK4' => array(self::BELONGS_TO, 'KeteranganYaTidak', 'R511AK4'),
 			'r505B' => array(self::BELONGS_TO, 'KeteranganAdaTidakada', 'R505B'),
 			'r506AK2' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R506AK2'),
 			'r506AK3' => array(self::BELONGS_TO, 'KeteranganAdaTidak', 'R506AK3'),
@@ -139,28 +159,28 @@ class PotensiR5 extends CActiveRecord
 	{
 		return array(
 			'DESAID' => 'Nama Desa',
-			'R501A' => 'R501 A',
-			'R501B' => 'R501 B',
+			'R501A' => 'Keluarga pengguna listrik PLN',
+			'R501B' => 'Keluarga pengguna listrik Non-PLN',
 			'R504' => 'Tempat buang air besar sebagian besar keluarga ',
 			'R505A' => 'Tempat buang sampah sebagian besar keluarga',
 			'R505B' => 'Tempat penampungan sampah sementara (TPS) ',
 			'R506AK2' => 'Apakah ada SUNGAI di wilayah desa/kelurahan',
 			'R506B1K2' => 'Apakah SUNGAI digunakan untuk MANDI',
 			'R506B2K2' => 'Apakah SUNGAI digungakan untuk MINUM',
-			'R506B3K2' => 'R506 B3 K2',
-			'R506B4K2' => 'R506 B4 K2',
-			'R506B5K2' => 'R506 B5 K2',
+			'R506B3K2' => 'Apakah SUNGAI digungakan untuk PENGAIRAN/IRIGASI LAHAN PERTANIANl',
+			'R506B4K2' => 'Apakah SUNGAI digungakan untuk PARIWISATA/KOMERSIL',
+			'R506B5K2' => 'Apakah SUNGAI digungakan untuk TRANSPORTASI',
 			'R506AK3' => 'Apakah ada SALURAN IRIGASI di desa/kelurahan',
 			'R506AK4' => 'Apakah ada WADUK/SITU di wilayah desa/kelurahan',
 			'R506B1K3' => 'Apakah SALURAN IRIGASI digungakan untuk MANDI',
 			'R506B1K4' => 'Apakah WADUK/SITU digungakan untuk MANDI',
 			'R506B2K3' => 'Apakah SALURAN IRIGASI digungakan untuk MINUM',
 			'R506B2K4' => 'Apakah WADUK/DANAU digungakan untuk MINUM',
-			'R506B3K3' => 'R506 B3 K3',
-			'R506B3K4' => 'R506 B3 K4',
-			'R506B4K3' => 'R506 B4 K3',
-			'R506B4K4' => 'R506 B4 K4',
-			'R506B5K4' => 'R506 B5 K4',
+			'R506B3K3' => 'Apakah SALURAN IRIGASI digungakan untuk PENGAIRAN/IRIGASI',
+			'R506B3K4' => 'Apakah DANAU/WADUK digungakan untuk PENGAIRAN/IRIGASI',
+			'R506B4K3' => 'Apakah SALURAN IRIGASI digungakan untuk PARIWISATA/KOMERSIL',
+			'R506B4K4' => 'Apakah DANAU/WADUK digungakan untuk PARIWISATA/KOMERSIL',
+			'R506B5K4' => 'Apakah DANAU/WADUK digungakan untuk TRANSPORTASI',
 			'R508A' => 'Jika ada sungai, apakah ada permukiman di bantaran sungai',
 			'R508B' => 'Jumlah permukiman di bantaran sungai',
 			'R508C' => 'Jumlah bangunan rumah di bantaran sungai',
@@ -171,10 +191,10 @@ class PotensiR5 extends CActiveRecord
 			'R510B3' => 'Jumlah keluarga di permukiman kumuh',
 			'R511AK2' => 'Apakah ada pencemaran AIR',
 			'R511AK3' => 'Sumber pencemaran lingkungan yang paling utama',
-			'R511AK4' => 'R511 Ak4',
+			'R511AK4' => 'Apakah ada pengaduan masyarakat ke aparat desa',
 			'R511BK2' => 'Apakah ada pencemaran TANAH',
 			'R511BK3' => 'Sumber pencemaran lingkungan yang paling utama',
-			'R511BK4' => 'R511 Bk4',
+			'R511BK4' => 'Apakah ada pengaduan masyarakat ke aparat desa',
 		);
 	}
 

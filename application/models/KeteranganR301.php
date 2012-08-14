@@ -6,6 +6,9 @@
  * The followings are the available columns in table 'keterangan_r301':
  * @property string $id
  * @property string $nama
+ *
+ * The followings are the available model relations:
+ * @property MainPotensiR3[] $mainPotensiR3s
  */
 class KeteranganR301 extends CActiveRecord
 {
@@ -52,6 +55,7 @@ class KeteranganR301 extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'mainPotensiR3s' => array(self::HAS_MANY, 'MainPotensiR3', 'R301'),
 		);
 	}
 
