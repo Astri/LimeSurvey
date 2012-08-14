@@ -2162,6 +2162,7 @@ function do_ranking($ia)
     $answer .="</ul>"
         . "<div style='display:none' id='ranking-{$ia[0]}-maxans'>{".$max_answers."}</div>"
         . "<div style='display:none' id='ranking-{$ia[0]}-minans'>{".$min_answers."}</div>"
+        . "<div style='display:none' id='ranking-{$ia[0]}-name'>javatb".$myfname."</div>"
         . "</div>";
     // The list with HTML answres
     $answer .="<div style=\"display:none\">";
@@ -2170,6 +2171,7 @@ function do_ranking($ia)
         $answer.="<div id=\"htmlblock-{$ia['0']}-{$ansrow['code']}\">{$ansrow['answer']}</div>";
     }
     $answer .="</div>";
+    header_includes("jquery/jquery.actual/jquery.actual.min.js"); // For jquery 1.5, can be removed with jquery 1.7, then had to rework on ranking.js
     header_includes("ranking.js");
     header_includes("ranking.css","css");
 
