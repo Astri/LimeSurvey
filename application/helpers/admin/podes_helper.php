@@ -65,7 +65,8 @@ function displayR($kat,$R,$id) {
 
 /**
  * Fungsi untuk menampilkan element yang dibandingkan pada table
- * perbandingan
+ * perbandingan. Catatan: pada tampilan perbandingan tidak terdapat logic untuk mengecek field 
+ * sebelumnya (semua field akan ditampilkan) ini juga logic yang digunakan di output Excel.
  * @modelarray array berisi model yang akan dibandingkan
  * @label string label yang akan dibandingkan
  * @relation boolean tampilkan relasinya atau tidak
@@ -236,7 +237,8 @@ function compareR5($modelarray) {
 	displayElement($modelarray, 'R506B2K2', true);
 	displayElement($modelarray, 'R506B3K2', true);
 	displayElement($modelarray, 'R506B4K2', true);
-	displayElement($modelarray, 'R506B5K2', true);displayElement($modelarray, 'R506AK3', true);
+	displayElement($modelarray, 'R506B5K2', true);
+	displayElement($modelarray, 'R506AK3', true);
 	displayElement($modelarray, 'R506B1K3', true);
 	displayElement($modelarray, 'R506B2K3', true);
 	displayElement($modelarray, 'R506AK4', true);

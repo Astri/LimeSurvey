@@ -28,7 +28,11 @@ class Podes extends Survey_Common_Action
 {
     /**
     * Initiates the survey action, checks for superadmin permission
-    *
+    * Note: HTML and XLSX output use different method when getting field from database
+	*       In HTML it use displayR method (to configure it you need to change 
+	*       file _viewR3 - _viewR12. 
+	*       While in XLSX its written inline, to change it you need to change line below
+	*		To change it quickly, use search and replace method in Notepad++.
     * @access public
     * @param CController $controller
     * @param string $id
@@ -68,7 +72,7 @@ class Podes extends Survey_Common_Action
             
 			$model->attributes=$_POST['PotensiForm'];
 			if($model->validate())
-			{		
+			{								
 				$output = array(
 					'id'=>$model->desaid,
 					'kat3'=>$model->kat3,
@@ -82,6 +86,47 @@ class Podes extends Survey_Common_Action
 					'kat12'=>$model->kat12,
 					'outputtype'=>$model->outputtype,
 				);
+				
+				
+
+				if ($model->outputtype=='xlsx') {
+					$potensiForm = new PotensiForm;
+					$DesaExcel = loadModel('Desa',$output['id']);	
+					
+					// Because we are using PHPExcel all data must be reloaded first
+					$dataDesa = array();
+					array_push($dataDesa,
+						$DesaExcel->kecamatan->kabupaten->provinsi->nama,
+						$DesaExcel->kecamatan->kabupaten->nama,
+						$DesaExcel->kecamatan->nama,
+						$DesaExcel->nama
+					);					
+					$output['DesaExcel']=$DesaExcel;
+					
+					// Setup Data Model
+					// Setup array containing list of potensi 
+					$output['potensiR'] = array(3,4,5,6,7,8,9,10,12); 					
+					foreach ($output['potensiR'] as $potensi) {
+						$kat = 'kat'.$potensi;
+						if ($model->$kat) {
+							$output["DesaExcelKat$potensi"] = loadModel("PotensiR$potensi",$output['id']);									
+							$output["DesaExcelKat$potensi"."Field"] = PotensiField::getKat($potensi);
+							foreach ($output["DesaExcelKat$potensi"."Field"] as $field) {			
+								if (ctype_lower(substr($field,0,1))) {								
+									array_push($dataDesa,$output["DesaExcelKat$potensi"]->$field->nama);
+								} else {
+									// Convert first character back to Capital
+									$field = ucfirst($field);
+									array_push($dataDesa,$output["DesaExcelKat$potensi"]->$field);
+								}
+							}							
+							$output["DesaExcelKat$potensi"."Header"] = $potensiForm->getAttributeLabel("kat$potensi");			
+						}
+					}
+					
+					
+					
+				}
 			}
 		}
 		
@@ -100,7 +145,6 @@ class Podes extends Survey_Common_Action
 	* Compare podes data from different village
 	* TODO: Add Permission
 	*       Add link from podes page
-	*       Add menu bar
 	*/
 	function compare() {
 		// Load podes helper function

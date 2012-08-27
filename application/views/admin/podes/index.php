@@ -250,15 +250,17 @@ if ($output && $output['outputtype']=='xlsx') {
 	/* BEGIN EXCEL OUTPUT */
 	
 	// Load Village Data
-	$DesaExcel = loadModel('Desa',$output['id']);	
-	$dataDesa = array();
-	array_push($dataDesa,
-		$DesaExcel->kecamatan->kabupaten->provinsi->nama,
-		$DesaExcel->kecamatan->kabupaten->nama,
-		$DesaExcel->kecamatan->nama,
-		$DesaExcel->nama
-	);
-	
+	$DesaExcel = $output['DesaExcel'];
+	if (array_key_exists('DesaExcelKat3',$output)) $DesaExcelKat3 = $output['DesaExcelKat3'];
+	if (array_key_exists('DesaExcelKat4',$output)) $DesaExcelKat4 = $output['DesaExcelKat4'];
+	if (array_key_exists('DesaExcelKat5',$output)) $DesaExcelKat5 = $output['DesaExcelKat5'];
+	if (array_key_exists('DesaExcelKat6',$output)) $DesaExcelKat6 = $output['DesaExcelKat6'];
+	if (array_key_exists('DesaExcelKat7',$output)) $DesaExcelKat7 = $output['DesaExcelKat7'];
+	if (array_key_exists('DesaExcelKat8',$output)) $DesaExcelKat8 = $output['DesaExcelKat8'];
+	if (array_key_exists('DesaExcelKat9',$output)) $DesaExcelKat9 = $output['DesaExcelKat9'];
+	if (array_key_exists('DesaExcelKat10',$output)) $DesaExcelKat10 = $output['DesaExcelKat10'];
+	if (array_key_exists('DesaExcelKat12',$output)) $DesaExcelKat12 = $output['DesaExcelKat12'];
+			
 	// get a reference to the path of PHPExcel classes 
 	$phpExcelPath = Yii::getPathOfAlias('application.third_party.phpexcel');
 	
@@ -280,14 +282,26 @@ if ($output && $output['outputtype']=='xlsx') {
 		->setLastModifiedBy("ECB JNA Database")
 		->setCategory("Approve by ");
 	
-	// Design Cell
-	$excel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);;
-	$excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);;
-	$excel->getActiveSheet()->mergeCells('A1:B1');
+	// Set column width, varies wheter another category checked or not. if yes, then set it autosize.
+	if (isset($DesaExcelKat3) || isset($DesaExcelKat4) || isset($DesaExcelKat5) || isset($DesaExcelKat6) || 
+	isset($DesaExcelKat7) || isset($DesaExcelKat8) || isset($DesaExcelKat9) || isset($DesaExcelKat10) || 
+	isset($DesaExcelKat12) ) {
+		$excel->getActiveSheet()->getColumnDimension('A')->setWidth(163);
+		$excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+	}
+	else {
+		$excel->getActiveSheet()->getColumnDimension('A')->setWidth(13);
+		$excel->getActiveSheet()->getColumnDimension('B')->setWidth(26);
+	}
 	
-	$styleHeading = array(
+	// Set alignment
+	$excel->getActiveSheet()->getStyle('B')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+	
+	// 1st Heading Style
+	$styleHeading1 = array(
 		'font' => array(
 			'bold' => true,
+			'size'=>20
 		),
 		'alignment' => array(
 			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -296,27 +310,116 @@ if ($output && $output['outputtype']=='xlsx') {
 			'top' => array(
 				'style' => PHPExcel_Style_Border::BORDER_MEDIUM,
 			),
+		),	
+	);
+	
+	// 2nd Heading Style
+	$styleHeading2 = array(
+		'font' => array(
+			'bold' => true,
+			'size'=>15
 		),
-		'fill' => array(
+		'alignment' => array(
+			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+		),
+		'borders' => array(
+			'bottom' => array(
+				'style' => PHPExcel_Style_Border::BORDER_MEDIUM,
+			),
+		),
+		/*'fill' => array(
 			'type' => PHPExcel_Style_Fill::FILL_SOLID,			
 			'startcolor' => array(
 				'rgb' => 'CAD9D2',
 			),			
-		),
+		),*/
 	);
 	
-	$excel->getActiveSheet()->getStyle('A1')->applyFromArray($styleHeading);
-
-	/* Add Data */
 	
-	// Column begin from 0
-	// Row begin from 1
+	/* Create Zebra Stripe */
+	$stripeColour = 'F5F5F5';
+	$objConditional1 = new PHPExcel_Style_Conditional();
+	$objConditional1->setConditionType(PHPExcel_Style_Conditional::CONDITION_EXPRESSION);
+	$objConditional1->setOperatorType(PHPExcel_Style_Conditional::OPERATOR_NONE);
+	$objConditional1->setCondition( 'MOD(ROW(),2)=0');
+	
+	/* Initializes Column and Row */
+	
+	$columnTitle = 0;
+	$columnContent = 1;
+	$rowActive = 0;
+	
+	/*****************************
+	* BEGIN Identification Data  *
+	******************************/
+	
+	// Fill Header Data and Style
+	$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Village Resources');
+	$excel->getActiveSheet()->mergeCells("A$rowActive:B$rowActive");
+	$excel->getActiveSheet()->getStyle("A$rowActive:B$rowActive")->applyFromArray($styleHeading1);
+	
+	$rowActive++;
+	
+	$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Biodata Desa');
+	$excel->getActiveSheet()->mergeCells("A$rowActive:B$rowActive");
+	$excel->getActiveSheet()->getStyle("A$rowActive:B$rowActive")->applyFromArray($styleHeading2);
+	
+	
+	// Fill Data
+	$rowStart = $rowActive;
 	$excel->getActiveSheet()
-	->setCellValueByColumnAndRow(0, 1, 'Village Resources')
-	->setCellValueByColumnAndRow(0, 2, 'Provinsi')->setCellValueByColumnAndRow(1, 2, $DesaExcel->kecamatan->kabupaten->provinsi->nama)
-	->setCellValueByColumnAndRow(0, 3, 'Kabupaten')->setCellValueByColumnAndRow(1, 3, $DesaExcel->kecamatan->kabupaten->nama)
-	->setCellValueByColumnAndRow(0, 4, 'Kecamatan')->setCellValueByColumnAndRow(1, 4, $DesaExcel->kecamatan->nama)
-	->setCellValueByColumnAndRow(0, 5, 'Desa')->setCellValueByColumnAndRow(1, 5, $DesaExcel->nama);	
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Provinsi')->setCellValueByColumnAndRow($columnContent, $rowActive, $DesaExcel->kecamatan->kabupaten->provinsi->nama)
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Kabupaten')->setCellValueByColumnAndRow($columnContent, $rowActive, $DesaExcel->kecamatan->kabupaten->nama)
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Kecamatan')->setCellValueByColumnAndRow($columnContent, $rowActive, $DesaExcel->kecamatan->nama)
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Desa')->setCellValueByColumnAndRow($columnContent, $rowActive, $DesaExcel->nama);
+	$rowFinish = $rowActive;
+	
+	// Give zebra stripe
+	$objConditional1->getStyle( "A$rowStart:B$rowFinish" )->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getEndColor()->setARGB( $stripeColour );
+	$conditionalStyles = $excel->getActiveSheet()->getStyle("A$rowStart:B$rowFinish")->getConditionalStyles();
+	array_push($conditionalStyles, $objConditional1);
+	$excel->getActiveSheet()->getStyle("A$rowStart:B$rowFinish")->setConditionalStyles($conditionalStyles);
+	
+	/*****************************
+	*   END Identification Data  *
+	******************************/
+	
+	/*****************************
+	* BEGIN Looping Potensi Data *
+	******************************/
+	foreach ($output['potensiR'] as $potensi) {
+		if (array_key_exists("DesaExcelKat$potensi",$output)) {
+			// Give space
+			$rowActive++;
+			
+			// Fill Header Data and Style
+			$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, $output["DesaExcelKat$potensi"."Header"]);
+			$excel->getActiveSheet()->mergeCells("A$rowActive:B$rowActive");
+			$excel->getActiveSheet()->getStyle("A$rowActive:B$rowActive")->applyFromArray($styleHeading2);
+			
+			// Fill data
+			$rowStart = $rowActive+1; // begin from first data
+			$DesaExcelField = $output["DesaExcelKat$potensi"."Field"];
+			foreach ($output["DesaExcelKat$potensi"."Field"] as $field) {			
+				if (ctype_lower(substr($field,0,1))) {
+					// Convert first character back to Capital
+					$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, $output["DesaExcelKat$potensi"]->getAttributeLabel(ucfirst($field)))->setCellValueByColumnAndRow($columnContent, $rowActive, $output["DesaExcelKat$potensi"]->$field->nama);
+				} else {
+					$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, $output["DesaExcelKat$potensi"]->getAttributeLabel(ucfirst($field)))->setCellValueByColumnAndRow($columnContent, $rowActive, $output["DesaExcelKat$potensi"]->$field);
+				}
+			}
+			$rowFinish = $rowActive;		
+			
+			// Give zebra stripe
+			$objConditional1->getStyle( "A$rowStart:B$rowFinish" )->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getEndColor()->setARGB( $stripeColour );
+			$conditionalStyles = $excel->getActiveSheet()->getStyle("A$rowStart:B$rowFinish")->getConditionalStyles();
+			array_push($conditionalStyles, $objConditional1);
+			$excel->getActiveSheet()->getStyle("A$rowStart:B$rowFinish")->setConditionalStyles($conditionalStyles);
+		}
+	}
+	/*****************************
+	*  END Looping Potensi Data  *
+	******************************/
 	
 	ob_end_clean();
 	
@@ -341,7 +444,6 @@ if ($output && $output['outputtype']=='xlsx') {
 	spl_autoload_register(array('YiiBase','autoload'));	
 }
 
-?>
 ?>
 </div>
 
