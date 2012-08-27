@@ -14,14 +14,14 @@ class PotensiForm extends CFormModel {
 	public $kat9;
 	public $kat10;
 	public $kat12;
-	//public $outputtype;
+	public $outputtype;
 	
 	public function rules()
 	{
 		return array(
 			array('provinsiid, kabupatenid, kecamatanid, desaid','numerical','integerOnly'=>true),
 			array('katAll, kat3, kat4, kat5, kat6, kat7, kat8, kat9, kat10, kat12','boolean','allowEmpty'=>true),
-			array('provinsiid, kabupatenid, kecamatanid, desaid','required'),
+			array('provinsiid, kabupatenid, kecamatanid, desaid, outputtype','required'),
 		);
 	}
 	
@@ -45,7 +45,7 @@ class PotensiForm extends CFormModel {
 			'kat9'=>'IX. Hiburan dan Olah Raga',
 			'kat10'=>'X. Angkutan, Komunikasi dan Informasi',
 			'kat12'=>'XII. Penggunaan Lahan',
-			//'outputtype'=>'Output format'
+			'outputtype'=>'Output format'
 		);
 	}
 	

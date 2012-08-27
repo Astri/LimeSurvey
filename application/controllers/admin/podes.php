@@ -42,10 +42,9 @@ class Podes extends Survey_Common_Action
     /**
     * This function show form to select location for podes    
 	* TODO: Add Permission
-	*       Add link from admin page
-	*       Add menu bar
+	*       Add link from admin page       
     */
-    function index()
+    function index() 
     {
 		// Load podes helper function
 		Yii::app()->loadHelper('admin/podes');
@@ -65,6 +64,7 @@ class Podes extends Survey_Common_Action
 
 		if(isset($_POST['PotensiForm']))
 		{
+			echo $model->outputtype;
             
 			$model->attributes=$_POST['PotensiForm'];
 			if($model->validate())
@@ -79,7 +79,8 @@ class Podes extends Survey_Common_Action
 					'kat8'=>$model->kat8,
 					'kat9'=>$model->kat9,
 					'kat10'=>$model->kat10,
-					'kat12'=>$model->kat12,					
+					'kat12'=>$model->kat12,
+					'outputtype'=>$model->outputtype,
 				);
 			}
 		}
@@ -91,6 +92,7 @@ class Podes extends Survey_Common_Action
 		
         $aData['model'] = $model;
 		$aData['output'] = $output;
+		
         $this->_renderWrappedTemplate('podes', 'index', $aData);
     }
 	

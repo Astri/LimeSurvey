@@ -29,8 +29,8 @@
         'title' => '');
 	
 	$add = array('src' => $sImageURL.'podes_add.png',
-        'alt' => 'Share panel',
-        'title' => 'Share panel',
+        'alt' => 'Add Podes Data',
+        'title' => 'Add Podes Data',
         'height' => 35,
         'width' => 35,
         'style' => 'margin-left:5px');
@@ -48,58 +48,15 @@
         </div>	
     </div>    
 </div>
-<?php
-	// get a reference to the path of PHPExcel classes 
-	$phpExcelPath = Yii::getPathOfAlias('application.third_party.phpexcel');
-	
-	// Turn off our amazing library autoload 
-	spl_autoload_unregister(array('YiiBase','autoload'));        
-	
-	//
-	// making use of our reference, include the main class
-	// when we do this, phpExcel has its own autoload registration
-	// procedure (PHPExcel_Autoloader::Register();)
-    include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
-	
-	// Create new PHPExcel object
-	$excel = new PHPExcel();
-	$excel->setActiveSheetIndex(0);	
-	
-	// Add some data
-	$excel->setActiveSheetIndex(0)
-	->setCellValue('A1', 'Hello')
-	->setCellValue('B2', 'world!')
-	->setCellValue('C1', 'Hello')
-	->setCellValue('D2', 'world!');
-	
-	ob_end_clean();
-	
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-store, no-cache, must-revalidate");
-	header("Cache-Control: post-check=0, pre-check=0", false);
-	header("Pragma: no-cache");
-	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-	header('Content-Disposition: attachment;filename="Report.xlsx"');
-
-	$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-	ob_end_clean();
-	
-	$objWriter->save('php://output');
-	$excel->disconnectWorksheets();
-	unset($excel);
-	Yii::app()->end();
-	
-	// 
-	// Once we have finished using the library, give back the 
-	// power to Yii... 
-	spl_autoload_register(array('YiiBase','autoload'));
-?>
 
 <?php $form=$this->beginWidget('bootstrap.widgets.BootActiveForm', array(
 	'id'=>'potensi-form-index-form',
 	'enableAjaxValidation'=>true,
     'enableClientValidation'=>true,
     'focus'=>array($model,'provinsiid'),
+	'htmlOptions'=>array(
+		'class'=>'form-inline',
+	),
 )); ?>
 
 	<div class='header ui-widget-header header_statistics'>
@@ -210,10 +167,15 @@
 				<li>
 					<?php echo $form->labelEx($model,'kat12'); ?>
 					<?php echo $form->checkBox($model,'kat12'); ?>
-					<?php echo $form->error($model,'kat12'); ?>
-				
-				
+					<?php echo $form->error($model,'kat12'); ?>				
 				<li>
+				
+					<li>
+						<?php echo $form->labelEx($model,'outputtype'); ?>
+						<?php echo $form->radioButtonList($model,'outputtype', array('xlsx'=>'Excel','html'=>'HTML'), array('template'=>'{input} {label}    ')); ?>
+						<?php echo $form->error($model,'outputtype'); ?>				
+						<li>
+				
 				<div align="center"> 
 					<?php echo CHtml::submitButton('Submit'); ?>
 				</div>
@@ -232,7 +194,9 @@
 
 <div id='podesoutput' class='resultfilters'<?php if (!$output) { echo " style='display:none' "; } ?>>
 
-<?php if ($output) { ?>
+<?php if ($output && $output['outputtype']=='html') { 
+/* BEGIN HTML OUTPUT */
+?>
 
 <h1 align="center" id="biodata">Village Resources</h1>
 <hr />
@@ -268,8 +232,6 @@
 <?
 
 /* Load output */
-
-//$modelr3 = $this->loadModel('PotensiR3',$output);
 	
 	displayR($output['kat3'],3,$output['id']);
 	displayR($output['kat4'],4,$output['id']);
@@ -282,9 +244,104 @@
 	displayR($output['kat12'],12,$output['id']);
 	
 	//print_r($output);
+} 
+
+if ($output && $output['outputtype']=='xlsx') {
+	/* BEGIN EXCEL OUTPUT */
+	
+	// Load Village Data
+	$DesaExcel = loadModel('Desa',$output['id']);	
+	$dataDesa = array();
+	array_push($dataDesa,
+		$DesaExcel->kecamatan->kabupaten->provinsi->nama,
+		$DesaExcel->kecamatan->kabupaten->nama,
+		$DesaExcel->kecamatan->nama,
+		$DesaExcel->nama
+	);
+	
+	// get a reference to the path of PHPExcel classes 
+	$phpExcelPath = Yii::getPathOfAlias('application.third_party.phpexcel');
+	
+	// Turn off our amazing library autoload 
+	spl_autoload_unregister(array('YiiBase','autoload'));        
+	
+	//
+	// making use of our reference, include the main class
+	// when we do this, phpExcel has its own autoload registration
+	// procedure (PHPExcel_Autoloader::Register();)
+	include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
+	
+	// Create new PHPExcel object
+	$excel = new PHPExcel();
+	$excel->setActiveSheetIndex(0);		
+	
+	// Set properties
+	$excel->getProperties()->setCreator("ECB JNA Database")
+		->setLastModifiedBy("ECB JNA Database")
+		->setCategory("Approve by ");
+	
+	// Design Cell
+	$excel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);;
+	$excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);;
+	$excel->getActiveSheet()->mergeCells('A1:B1');
+	
+	$styleHeading = array(
+		'font' => array(
+			'bold' => true,
+		),
+		'alignment' => array(
+			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+		),
+		'borders' => array(
+			'top' => array(
+				'style' => PHPExcel_Style_Border::BORDER_MEDIUM,
+			),
+		),
+		'fill' => array(
+			'type' => PHPExcel_Style_Fill::FILL_SOLID,			
+			'startcolor' => array(
+				'rgb' => 'CAD9D2',
+			),			
+		),
+	);
+	
+	$excel->getActiveSheet()->getStyle('A1')->applyFromArray($styleHeading);
+
+	/* Add Data */
+	
+	// Column begin from 0
+	// Row begin from 1
+	$excel->getActiveSheet()
+	->setCellValueByColumnAndRow(0, 1, 'Village Resources')
+	->setCellValueByColumnAndRow(0, 2, 'Provinsi')->setCellValueByColumnAndRow(1, 2, $DesaExcel->kecamatan->kabupaten->provinsi->nama)
+	->setCellValueByColumnAndRow(0, 3, 'Kabupaten')->setCellValueByColumnAndRow(1, 3, $DesaExcel->kecamatan->kabupaten->nama)
+	->setCellValueByColumnAndRow(0, 4, 'Kecamatan')->setCellValueByColumnAndRow(1, 4, $DesaExcel->kecamatan->nama)
+	->setCellValueByColumnAndRow(0, 5, 'Desa')->setCellValueByColumnAndRow(1, 5, $DesaExcel->nama);	
+	
+	ob_end_clean();
+	
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="Report.xlsx"');
+	
+	$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+	ob_end_clean();
+	
+	$objWriter->save('php://output');
+	$excel->disconnectWorksheets();
+	unset($excel);
+	Yii::app()->end();
+	
+	 
+	// Once we have finished using the library, give back the 
+	// power to Yii... 
+	spl_autoload_register(array('YiiBase','autoload'));	
 }
 
-
+?>
 ?>
 </div>
 

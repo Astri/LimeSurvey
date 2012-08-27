@@ -91,33 +91,78 @@
 				$datakosong = array(''=>'');
 
 				// Provinsi
-				echo $form->dropDownListRow($model, 'provinsiid1',  $dataprov);
+	echo $form->labelEx($model,'provinsiid1');	
+	$this->widget('application.third_party.select2.ESelect2',array(	
+		'model'=>$model,
+		'attribute'=>'provinsiid1',
+		'data'=>$dataprov,					
+		'options'=>array(
+			'placeholder'=>'Pilih Provinsi',
+			'allowClear'=>true,				
+		),
+		'htmlOptions'=>array(
+			'options'=>array(
+				''=>array('value'=>'','selected'=>'selected'),
+			),
+		),
+	));
+	echo $form->error($model,'provinsiid1');
 
-				// Kabupaten
-				echo $form->dropDownListRow($model,'kabupatenid1',$datakosong);
-
-				// Kecamatan
-				echo $form->dropDownListRow($model,'kecamatanid1',$datakosong);
-
-				// Desa	
-				echo $form->labelEx($model,'desaid1');
-				$this->widget('application.third_party.select2.ESelect2',array(	
+	// Kabupaten
+	echo $form->labelEx($model,'kabupatenid1');
+	$this->widget('application.third_party.select2.ESelect2',array(	
+		'model'=>$model,
+		'attribute'=>'kabupatenid1',
+		'data'=>array(''=>''),					
+		'options'=>array(
+			'placeholder'=>'Pilih Kabupaten',
+			'allowClear'=>true,
+		),
+					'htmlOptions'=>array(						
+					'options'=>array(
+					''=>array('value'=>null,'selected'=>null),
+					),
+					),					
+					));
+					echo $form->error($model,'kabupatenid1');
+					
+					// Kecamatan
+					echo $form->labelEx($model,'kecamatanid1');
+					$this->widget('application.third_party.select2.ESelect2',array(	
+					'model'=>$model,
+					'attribute'=>'kecamatanid1',
+					'data'=>array(''=>''),					
+					'options'=>array(
+					'placeholder'=>'Pilih Kecamatan',
+					'allowClear'=>true,
+					),
+					'htmlOptions'=>array(						
+					'options'=>array(
+					''=>array('value'=>null,'selected'=>null),
+					),
+					),					
+					));
+					echo $form->error($model,'kecamatanid1');
+					
+					// Desa	
+					echo $form->labelEx($model,'desaid1');
+					$this->widget('application.third_party.select2.ESelect2',array(	
 					'model'=>$model,
 					'attribute'=>'desaid1',
 					'data'=>array(''=>''),					
 					'options'=>array(
-						'placeholder'=>'Pilih Desa',
-						'allowClear'=>true,				
+					'placeholder'=>'Pilih Desa',
+					'allowClear'=>true,				
 					),
 					'htmlOptions'=>array(
-						'multiple'=>'multiple',
-						'options'=>array(
-							''=>array('value'=>null,'selected'=>null),
-						),		
+					'multiple'=>'multiple',
+					'options'=>array(
+					''=>array('value'=>null,'selected'=>null),
+					),		
 					),
-				));
-				echo $form->error($model,'desaid1');
-
+					));
+					echo $form->error($model,'desaid1');
+					
 				?>
 				</div>
 				
@@ -245,14 +290,20 @@
 </div>
 
 <script type="text/javascript">
+
+
 $(document).ready(function() {
+	
+	alert('halooo');
 	$('.checkall').click(function () {
 		$(this).parents('fieldset:eq(0)').find(':checkbox').attr('checked', this.checked);
 	});	
 	
-	// Location 1
+	
+	
 	$('#CompareForm_provinsiid1').change(function() {
-			$.ajax({
+		alert('satu');
+			/*$.ajax({
 				type: 'POST',
 				url: "<?php echo CController::createUrl('potensi/getkabupaten') ?>",
 				data: {provinsiid : $('#CompareForm_provinsiid1').val()},
@@ -261,7 +312,7 @@ $(document).ready(function() {
 					$('#CompareForm_kabupatenid1 option:gt(0)').remove();
 					$("#CompareForm_kabupatenid1").append(data);
 				}
-			});
+			});*/
 		});
 
 	$('#CompareForm_kabupatenid1').change(function() {
@@ -292,6 +343,7 @@ $(document).ready(function() {
 		
 	//// LOCATION 2
 	$('#CompareForm_provinsiid2').change(function() {
+		alert('dua');
 			$.ajax({
 				type: 'POST',
 				url: "<?php echo CController::createUrl('potensi/getkabupaten') ?>",
