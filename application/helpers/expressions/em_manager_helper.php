@@ -7515,7 +7515,7 @@ EOD;
                     {
                         if ($qinfo['info']['hidden'] && !isset($_POST[$sq]))
                         {
-                            $value = (isset($_SESSION['survey_'.$LEM->sessid][$sq]) ? $_SESSION['survey_'.$LEM->sessid][$sq] : '');    // if always hidden, use the default value, if any
+                            $value = (isset($_SESSION[$LEM->sessid][$sq]) ? $_SESSION[$LEM->sessid][$sq] : '');    // if always hidden, use the default value, if any
                         }
                         else
                         {
@@ -7558,7 +7558,7 @@ EOD;
                                     // if the files have not been saved already,
                                     // move the files from tmp to the files folder
 
-                                    $tmp = $LEM->surveyOptions['tempdir'] . '/upload/';
+                                    $tmp = $LEM->surveyOptions['tempdir'] . 'upload'. DIRECTORY_SEPARATOR;
                                     if (!is_null($phparray) && count($phparray) > 0)
                                     {
                                         // Move the (unmoved, temp) files from temp to files directory.
