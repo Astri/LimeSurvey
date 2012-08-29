@@ -335,10 +335,12 @@
                         {echo " checked='checked'";}
 
                         echo " />&nbsp;";
-                        echo _showSpeaker($flt[3]." - ".flattenText($row[1],true))
+						
+						echo _showSpeaker($flt[3]." - ".flattenText($row[1],true))
                         ."<br />\n"
                         ."\t<span class='smalltext'>".$clang->gT("Responses containing").":</span><br />\n"
                         ."\t<input type='text' name='$myfield2' value='";
+                        
                         if (isset($_POST[$myfield2]))
                         {echo $_POST[$myfield2];}
 
@@ -386,12 +388,25 @@
 
                     if (isset($summary) && (array_search("T{$surveyid}X{$flt[1]}X{$flt[0]}", $summary) !== FALSE))
                     {echo " checked='checked'";}
-
-                    echo " />&nbsp;"
+					
+					/*	Edited by raffi to call ajax effect*/
+					if($niceqtext == "Province" || $niceqtext == "District" || $niceqtext == "Sub-District" || $niceqtext == "Village") {
+						$niceqtextTemp = $niceqtext."temp";
+						echo " />&nbsp;"
+                    ."&nbsp;"._showSpeaker($niceqtext)
+                    ."<br />\n"
+                    ."\t<span class='smalltext'>".$clang->gT("Responses containing").":</span><br />\n"
+					."<input type='text' name='$niceqtextTemp' style='display : none;' value='$myfield2' /> <br/>"
+                    ."\t<input type='text' name='$myfield2' style='display : none;' value='";
+					}
+					else {
+						echo " />&nbsp;"
                     ."&nbsp;"._showSpeaker($niceqtext)
                     ."<br />\n"
                     ."\t<span class='smalltext'>".$clang->gT("Responses containing").":</span><br />\n"
                     ."\t<input type='text' name='$myfield2' value='";
+					}
+                    /* End of editted, the original is in else condition*/
 
                     if (isset($_POST[$myfield2])) {echo $_POST[$myfield2];}
 
@@ -1280,6 +1295,89 @@
         ?>
     </tr>
     </table>
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+	// Note: change podes_webapp URL in production mode
+	// If needed, also change provinsi, kabupaten, kecamatan and desa fieldname
+	var podes_webapp = "http://localhost:8080/podes_webapp";
+	var elprovinsi = $("input[name=Provincetemp]").val();
+	var elkabupaten = $("input[name=Districttemp]").val();
+	var elkecamatan = $("input[name=Sub-Districttemp]").val();
+	var eldesa = $("input[name=Villagetemp]").val();
+	
+	//init debug
+	//alert(elprovinsi);
+	
+	$('<select name="PotensiForm[provinsiid]" id="PotensiForm_provinsiid"><option value="" selected="selected"></option><option value="11">NANGGROE ACEH DARUSSALAM</option><option value="12">SUMATERA UTARA</option><option value="13">SUMATERA BARAT</option><option value="14">RIAU</option><option value="15">JAMBI</option><option value="16">SUMATERA SELATAN</option><option value="17">BENGKULU</option><option value="18">LAMPUNG</option><option value="19">KEPULAUAN BANGKA BELITUNG</option><option value="21">KEPULAUAN RIAU</option><option value="31">DKI JAKARTA</option><option value="32">JAWA BARAT</option><option value="33">JAWA TENGAH</option><option value="34">DI YOGYAKARTA</option><option value="35">JAWA TIMUR</option><option value="36">BANTEN</option><option value="51">BALI</option><option value="52">NUSA TENGGARA BARAT</option><option value="53">NUSA TENGGARA TIMUR</option><option value="61">KALIMANTAN BARAT</option><option value="62">KALIMANTAN TENGAH</option><option value="63">KALIMANTAN SELATAN</option><option value="64">KALIMANTAN TIMUR</option><option value="71">SULAWESI UTARA</option><option value="72">SULAWESI TENGAH</option><option value="73">SULAWESI SELATAN</option><option value="74">SULAWESI TENGGARA</option><option value="75">GORONTALO</option><option value="76">SULAWESI BARAT</option><option value="81">MALUKU</option><option value="82">MALUKU UTARA</option><option value="91">PAPUA BARAT</option><option value="94">PAPUA</option></select>').insertAfter("input[name="+elprovinsi+"]");
+	
+	$('#PotensiForm_provinsiid').change(function() {
+	  $("input[name="+elprovinsi+"]").val($(this).val());
+	});
+	
+	// Elemen Kabupaten
+	$('<select name="PotensiForm[kabupatenid]" id="PotensiForm_kabupatenid"><option value="" selected="selected"></option><option value="11">Nama Kabupaten</option></select>').insertAfter("input[name="+elkabupaten+"]");
+
+	$('#PotensiForm_kabupatenid').change(function() {
+	  $("input[name="+elkabupaten+"]").val($(this).val());
+	});
+	
+	// Elemen Kecamatan
+	$('<select name="PotensiForm[kecamatanid]" id="PotensiForm_kecamatanid"><option value="" selected="selected"></option><option value="12">Nama Kecamatan</option></select>').insertAfter("input[name="+elkecamatan+"]");
+
+	$('#PotensiForm_kecamatanid').change(function() {
+	  $("input[name="+elkecamatan+"]").val($(this).val());
+	});
+	
+	// Elemen Desa
+	$('<select name="PotensiForm[desaid]" id="PotensiForm_desaid"><option value="" selected="selected"></option><option value="13">Nama Desa</option></select>').insertAfter("input[name="+eldesa+"]");
+
+	$('#PotensiForm_desaid').change(function() {
+	  $("input[name="+eldesa+"]").val($(this).val());
+	});
+	
+	// Dynamically update dropdownlist from AJAX
+	$('#PotensiForm_provinsiid').change(function() {
+		$.ajax({
+			type: 'POST',
+			url: podes_webapp+"/potensi/getKabupaten",
+			data: { provinsiid : $('#PotensiForm_provinsiid').val() },
+			success: function(data) {
+				$("#PotensiForm_kabupatenid").val(null).trigger("change"); 
+				$('#PotensiForm_kabupatenid option:gt(0)').remove();
+				$("#PotensiForm_kabupatenid").append(data);
+			}
+		});
+	});
+
+	$('#PotensiForm_kabupatenid').change(function() {
+		$.ajax({
+			type: 'POST',
+			url: podes_webapp+"/potensi/getKecamatan",
+			data: { kabupatenid : $('#PotensiForm_kabupatenid').val() },
+			success: function(data) {
+				$("#PotensiForm_kecamatanid").val(null).trigger("change"); 
+				$('#PotensiForm_kecamatanid option:gt(0)').remove();
+				$("#PotensiForm_kecamatanid").append(data);
+			}
+		});
+	});
+
+	$('#PotensiForm_kecamatanid').change(function() {
+		$.ajax({
+			type: 'POST',
+			url: podes_webapp+"/potensi/getDesa",
+			data: { kecamatanid : $('#PotensiForm_kecamatanid').val() },
+			success: function(data) {
+				$("#PotensiForm_desaid").val(null).trigger("change"); 
+				$('#PotensiForm_desaid option:gt(0)').remove();
+				$("#PotensiForm_desaid").append(data);
+			}
+		});
+	});
+	
+	});
+	
+	</script>
     </div>
     </td></tr>
     <tr class='statistics-tbl-separator'><td></td></tr>
