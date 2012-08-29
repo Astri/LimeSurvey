@@ -22,6 +22,7 @@ class CompareForm extends CFormModel {
 	public $kat9;
 	public $kat10;
 	public $kat12;
+	public $outputtype;
 	
 	public function rules()
 	{
@@ -30,7 +31,7 @@ class CompareForm extends CFormModel {
 			array('provinsiid2, kabupatenid2, kecamatanid2','numerical','integerOnly'=>true),	
 			array('provinsiid3, kabupatenid3, kecamatanid3','numerical','integerOnly'=>true),			
 			array('katAll, kat3, kat4, kat5, kat6, kat7, kat8, kat9, kat10, kat12','boolean','allowEmpty'=>true),
-			array('provinsiid1, kabupatenid1, kecamatanid1, desaid1','required'),
+			array('provinsiid1, kabupatenid1, kecamatanid1, desaid1, outputtype','required'),
 			array('desaid2, desaid3','default','setOnEmpty'=>true, 'value'=>0),
 		);
 	}
@@ -63,6 +64,7 @@ class CompareForm extends CFormModel {
 			'kat9'=>'IX. Hiburan dan Olah Raga',
 			'kat10'=>'X. Angkutan, Komunikasi dan Informasi',
 			'kat12'=>'XII. Penggunaan Lahan',
+			'outputtype'=>'Output format',
 		);
 	}
 	

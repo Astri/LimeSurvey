@@ -91,78 +91,33 @@
 				$datakosong = array(''=>'');
 
 				// Provinsi
-	echo $form->labelEx($model,'provinsiid1');	
-	$this->widget('application.third_party.select2.ESelect2',array(	
-		'model'=>$model,
-		'attribute'=>'provinsiid1',
-		'data'=>$dataprov,					
-		'options'=>array(
-			'placeholder'=>'Pilih Provinsi',
-			'allowClear'=>true,				
-		),
-		'htmlOptions'=>array(
-			'options'=>array(
-				''=>array('value'=>'','selected'=>'selected'),
-			),
-		),
-	));
-	echo $form->error($model,'provinsiid1');
+				echo $form->dropDownListRow($model, 'provinsiid1',  $dataprov);
 
-	// Kabupaten
-	echo $form->labelEx($model,'kabupatenid1');
-	$this->widget('application.third_party.select2.ESelect2',array(	
-		'model'=>$model,
-		'attribute'=>'kabupatenid1',
-		'data'=>array(''=>''),					
-		'options'=>array(
-			'placeholder'=>'Pilih Kabupaten',
-			'allowClear'=>true,
-		),
-					'htmlOptions'=>array(						
-					'options'=>array(
-					''=>array('value'=>null,'selected'=>null),
-					),
-					),					
-					));
-					echo $form->error($model,'kabupatenid1');
-					
-					// Kecamatan
-					echo $form->labelEx($model,'kecamatanid1');
-					$this->widget('application.third_party.select2.ESelect2',array(	
-					'model'=>$model,
-					'attribute'=>'kecamatanid1',
-					'data'=>array(''=>''),					
-					'options'=>array(
-					'placeholder'=>'Pilih Kecamatan',
-					'allowClear'=>true,
-					),
-					'htmlOptions'=>array(						
-					'options'=>array(
-					''=>array('value'=>null,'selected'=>null),
-					),
-					),					
-					));
-					echo $form->error($model,'kecamatanid1');
-					
-					// Desa	
-					echo $form->labelEx($model,'desaid1');
-					$this->widget('application.third_party.select2.ESelect2',array(	
+				// Kabupaten
+				echo $form->dropDownListRow($model,'kabupatenid1',$datakosong);
+
+				// Kecamatan
+				echo $form->dropDownListRow($model,'kecamatanid1',$datakosong);
+
+				// Desa	
+				echo $form->labelEx($model,'desaid1');
+				$this->widget('application.third_party.select2.ESelect2',array(	
 					'model'=>$model,
 					'attribute'=>'desaid1',
 					'data'=>array(''=>''),					
 					'options'=>array(
-					'placeholder'=>'Pilih Desa',
-					'allowClear'=>true,				
+						'placeholder'=>'Pilih Desa',
+						'allowClear'=>true,				
 					),
 					'htmlOptions'=>array(
-					'multiple'=>'multiple',
-					'options'=>array(
-					''=>array('value'=>null,'selected'=>null),
-					),		
+						'multiple'=>'multiple',
+						'options'=>array(
+							''=>array('value'=>null,'selected'=>null),
+						),		
 					),
-					));
-					echo $form->error($model,'desaid1');
-					
+				));
+				echo $form->error($model,'desaid1');
+
 				?>
 				</div>
 				
@@ -255,6 +210,8 @@
 				<?php echo $form->checkboxRow($model, 'kat9'); ?>
 				<?php echo $form->checkboxRow($model, 'kat10'); ?>
 				<?php echo $form->checkboxRow($model, 'kat12'); ?>
+				<?php echo $form->radioButtonListRow($model, 'outputtype', array('xlsx'=>'Excel','html'=>'HTML'), array('class'=>'inline')); ?>
+				
 				<div align="center"> 
 					<?php echo CHtml::submitButton('Submit'); ?>
 				</div>
@@ -273,7 +230,11 @@
 
 <div id='podesoutput' class='resultfilters' <?php if (!$output) { echo " style='display:none' "; } ?>>
 
-<?php if ($output) { 
+<?php if ($output['outputtype']=='html') { 
+	/* BEGIN HTML OUTPUT */
+	
+	echo '<h1 align="center" id="biodata">Village Resources Comparison</h1>';
+	echo '<hr />';
 	compareBiodata(LoadModels('Desa',$output['desaids']));	
 	if ($output['kat3']) compareR3(LoadModels('PotensiR3',$output['desaids']));
 	if ($output['kat4']) compareR4(LoadModels('PotensiR4',$output['desaids']));
@@ -285,25 +246,259 @@
 	if ($output['kat10']) compareR10(LoadModels('PotensiR10',$output['desaids']));
 	if ($output['kat12']) compareR12(LoadModels('PotensiR12',$output['desaids']));
 	
+	/* END HTML OUTPUT */
+	
+	} elseif ($output['outputtype']=='xlsx') { 		
+	
+	/* BEGIN EXCEL OUTPUT */
+		
+	// get a reference to the path of PHPExcel classes 
+	$phpExcelPath = Yii::getPathOfAlias('application.third_party.phpexcel');
+	
+	// Turn off our amazing library autoload 
+	spl_autoload_unregister(array('YiiBase','autoload'));        
+	
+	//
+	// making use of our reference, include the main class
+	// when we do this, phpExcel has its own autoload registration
+	// procedure (PHPExcel_Autoloader::Register();)
+	include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
+	
+	// Create new PHPExcel object
+	$excel = new PHPExcel();
+	$excel->setActiveSheetIndex(0);		
+	
+	// Set properties
+	$excel->getProperties()->setCreator("ECB JNA Database")
+		->setLastModifiedBy("ECB JNA Database")
+		->setCategory("Approve by ");
+		
+	// 1st Heading Style
+	$styleHeading1 = array(
+		'font' => array(
+			'bold' => true,
+			'size'=>20
+		),
+		'alignment' => array(
+			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+		),
+		'borders' => array(
+			'top' => array(
+				'style' => PHPExcel_Style_Border::BORDER_MEDIUM,
+			),
+		),	
+	);
+	
+	// 2nd Heading Style
+	$styleHeading2 = array(
+		'font' => array(
+			'bold' => true,
+			'size'=>15
+		),
+		'alignment' => array(
+			'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+		),
+		'borders' => array(
+			'bottom' => array(
+				'style' => PHPExcel_Style_Border::BORDER_MEDIUM,
+			),
+		),
+	);
+	
+	
+	/* Create Zebra Stripe */
+	$stripeColour = 'F5F5F5';
+	$objConditional1 = new PHPExcel_Style_Conditional();
+	$objConditional1->setConditionType(PHPExcel_Style_Conditional::CONDITION_EXPRESSION);
+	$objConditional1->setOperatorType(PHPExcel_Style_Conditional::OPERATOR_NONE);
+	$objConditional1->setCondition( 'MOD(ROW(),2)=0');
+	
+	/* Initializes Column and Row */
+	
+	$columnTitle = 0;
+	$columnContent = 1;
+	$rowActive = 0;
+	$maxColumn = count($output['DesaExcels']);
+	
+	/*****************************
+	* BEGIN Identification Data  *
+	******************************/
+	
+	// Fill Header Title Data and Style
+	$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Village Resources Comparison');	
+	$excel->getActiveSheet()->mergeCells(
+		$excel->getActiveSheet()->getCellByColumnAndRow($columnTitle,$rowActive)->getCoordinate()
+		.":".
+		$excel->getActiveSheet()->getCellByColumnAndRow($maxColumn,$rowActive)->getCoordinate());
+		
+	$excel->getActiveSheet()->getStyle(
+		$excel->getActiveSheet()->getCellByColumnAndRow($columnTitle,$rowActive)->getCoordinate()
+		.":".
+		$excel->getActiveSheet()->getCellByColumnAndRow($maxColumn,$rowActive)->getCoordinate()
+		)->applyFromArray($styleHeading1);
+	
+	$rowActive++;
+	
+	// Biodata Header Style and Data
+	$beginCell = $excel->getActiveSheet()->getCellByColumnAndRow($columnTitle,$rowActive)->getCoordinate();
+	$endCell = $excel->getActiveSheet()->getCellByColumnAndRow($maxColumn,$rowActive)->getCoordinate();
+	$rangeCell = $beginCell.":".$endCell;
+	$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Biodata Desa');
+	$excel->getActiveSheet()->mergeCells($rangeCell);
+	$excel->getActiveSheet()->getStyle($excel->getActiveSheet()->getCellByColumnAndRow($columnTitle,$rowActive)->getCoordinate()
+		.":".
+		$excel->getActiveSheet()->getCellByColumnAndRow($maxColumn,$rowActive)->getCoordinate())->applyFromArray($styleHeading2);
+	
+	// Set Column Width to autosize	
+	$i = $columnTitle;
+	while ($i <= $maxColumn) {
+		$excel->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		$i++;
 	}
-?>
+	
+	// Fill Title
+	$rowStart = $rowActive;
+	$excel->getActiveSheet()
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Provinsi')
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Kabupaten')
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Kecamatan')
+		->setCellValueByColumnAndRow($columnTitle, ++$rowActive, 'Desa');
+	$rowFinish = $rowActive;
+	
+	$columnActive = $columnContent;	// Mark active column because we will increment it for multiple village data
+	foreach ($output['DesaExcels'] as $DesaExcel) {
+		$rowActiveData = $rowStart;				
+		$excel->getActiveSheet()
+			->setCellValueByColumnAndRow($columnActive, ++$rowActiveData, $DesaExcel->kecamatan->kabupaten->provinsi->nama)
+			->setCellValueByColumnAndRow($columnActive, ++$rowActiveData, $DesaExcel->kecamatan->kabupaten->nama)
+			->setCellValueByColumnAndRow($columnActive, ++$rowActiveData, $DesaExcel->kecamatan->nama)
+			->setCellValueByColumnAndRow($columnActive, ++$rowActiveData, $DesaExcel->nama);				
+		$columnActive++;
+	}
+	$columnActive--;	
+	
+	// Give Zebra Stripe
+	$beginCell = $excel->getActiveSheet()->getCellByColumnAndRow($columnTitle,$rowStart)->getCoordinate();
+	$endCell = $excel->getActiveSheet()->getCellByColumnAndRow($columnActive,$rowFinish)->getCoordinate();
+	$rangeCell = $beginCell.":".$endCell;
+	$objConditional1->getStyle($rangeCell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getEndColor()->setARGB( $stripeColour );
+	$conditionalStyles = $excel->getActiveSheet()->getStyle($rangeCell)->getConditionalStyles();
+	array_push($conditionalStyles, $objConditional1);
+	$excel->getActiveSheet()->getStyle($rangeCell)->setConditionalStyles($conditionalStyles);	
+	
+	/*****************************
+	 *  END Identification Data  *
+	 *****************************/
+	 
+	/********************************************
+	 * BEGIN Looping Potensi Data and Villages  *
+	 ********************************************/ 
+	//Header and Title Cell
+	$rowBegin = $rowActive+3;
+	foreach ($output['potensiR'] as $potensi) {		
+		// Give space
+		$rowActive++;
+		
+		// Header Cell //		
+		// Fill Header Data and Style
+		$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, $output["DesaExcelKat$potensi"."Header"]);		
+		
+		// Give Header Style
+		$beginCell = $excel->getActiveSheet()->getCellByColumnAndRow($columnTitle,$rowActive)->getCoordinate();
+		$endCell = $excel->getActiveSheet()->getCellByColumnAndRow($maxColumn,$rowActive)->getCoordinate();
+		$rangeCell = $beginCell.":".$endCell;
+		$excel->getActiveSheet()->mergeCells($rangeCell);
+		$excel->getActiveSheet()->getStyle($rangeCell)->applyFromArray($styleHeading2);		
+				
+		$kat = 'kat'.$potensi;
+		$rowStart = $rowActive+1;
+		
+		// Title Cell //		
+		$desaid = $output['desaids'][0]; // This will make title cell only writtten once
+		$DesaExcelField = $output["DesaExcel$desaid"."Kat$potensi"."Field"];
+		foreach ($output["DesaExcel$desaid"."Kat$potensi"."Field"] as $field) {
+			if (ctype_lower(substr($field,0,1))) {
+				// Convert first character back to Capital
+				$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, $output["DesaExcel$desaid"."Kat$potensi"]->getAttributeLabel(ucfirst($field)));
+			} else {
+				$excel->getActiveSheet()->setCellValueByColumnAndRow($columnTitle, ++$rowActive, $output["DesaExcel$desaid"."Kat$potensi"]->getAttributeLabel($field));
+			}
+		}		
+		
+	}
+	
+	// Content Cell //
+	$rowActive = $rowBegin;
+	$columnActive = $columnTitle+1;		
+	foreach ($output['desaids'] as $desaid) {				
+		$rowActive = $rowBegin; // 
+		foreach ($output['potensiR'] as $potensi) {						
+			$rowStart = $rowActive; // mark start of Zebra Stripe
+			foreach ($output["DesaExcel$desaid"."Kat$potensi"."Field"] as $content) {				
+				if (ctype_lower(substr($content,0,1))) {
+					// Get relation value
+					$excel->getActiveSheet()->setCellValueByColumnAndRow($columnActive, $rowActive++, $output["DesaExcel$desaid"."Kat$potensi"]->$content->nama);
+				} else {
+					// Get real value
+					$excel->getActiveSheet()->setCellValueByColumnAndRow($columnActive, $rowActive++, $output["DesaExcel$desaid"."Kat$potensi"]->$content);
+				}
+			}
+			$rowFinish = $rowActive-1; // Mark end of Zebra Stripe
+			$rowActive = $rowActive+2;
+			
+			// Give Zebra Stripe
+			$beginCell = $excel->getActiveSheet()->getCellByColumnAndRow($columnTitle,$rowStart)->getCoordinate();
+			$endCell = $excel->getActiveSheet()->getCellByColumnAndRow($columnActive,$rowFinish)->getCoordinate();
+			$rangeCell = $beginCell.":".$endCell;
+			$objConditional1->getStyle($rangeCell)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getEndColor()->setARGB( $stripeColour );
+			$conditionalStyles = $excel->getActiveSheet()->getStyle($rangeCell)->getConditionalStyles();
+			array_push($conditionalStyles, $objConditional1);
+			$excel->getActiveSheet()->getStyle($rangeCell)->setConditionalStyles($conditionalStyles);	
+			
+		}
+		$columnActive++;				
+	}
+
+	/********************************************
+	 *  END Looping Potensi Data and Villages   *
+	 ********************************************/ 
+	
+	ob_end_clean();
+	
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	header('Content-Disposition: attachment;filename="Report.xlsx"');
+	
+	$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+	ob_end_clean();
+	
+	$objWriter->save('php://output');
+	$excel->disconnectWorksheets();
+	unset($excel);
+	Yii::app()->end();
+	
+	 
+	// Once we have finished using the library, give back the 
+	// power to Yii... 
+	spl_autoload_register(array('YiiBase','autoload'));	
+		
+	/* END EXCEL OUTPUT */	
+	}
+?> 
 </div>
 
 <script type="text/javascript">
-
-
 $(document).ready(function() {
-	
-	alert('halooo');
 	$('.checkall').click(function () {
 		$(this).parents('fieldset:eq(0)').find(':checkbox').attr('checked', this.checked);
 	});	
 	
-	
-	
+	// Location 1
 	$('#CompareForm_provinsiid1').change(function() {
-		alert('satu');
-			/*$.ajax({
+			$.ajax({
 				type: 'POST',
 				url: "<?php echo CController::createUrl('potensi/getkabupaten') ?>",
 				data: {provinsiid : $('#CompareForm_provinsiid1').val()},
@@ -312,7 +507,7 @@ $(document).ready(function() {
 					$('#CompareForm_kabupatenid1 option:gt(0)').remove();
 					$("#CompareForm_kabupatenid1").append(data);
 				}
-			});*/
+			});
 		});
 
 	$('#CompareForm_kabupatenid1').change(function() {
@@ -343,7 +538,6 @@ $(document).ready(function() {
 		
 	//// LOCATION 2
 	$('#CompareForm_provinsiid2').change(function() {
-		alert('dua');
 			$.ajax({
 				type: 'POST',
 				url: "<?php echo CController::createUrl('potensi/getkabupaten') ?>",

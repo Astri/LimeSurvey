@@ -250,16 +250,7 @@ if ($output && $output['outputtype']=='xlsx') {
 	/* BEGIN EXCEL OUTPUT */
 	
 	// Load Village Data
-	$DesaExcel = $output['DesaExcel'];
-	if (array_key_exists('DesaExcelKat3',$output)) $DesaExcelKat3 = $output['DesaExcelKat3'];
-	if (array_key_exists('DesaExcelKat4',$output)) $DesaExcelKat4 = $output['DesaExcelKat4'];
-	if (array_key_exists('DesaExcelKat5',$output)) $DesaExcelKat5 = $output['DesaExcelKat5'];
-	if (array_key_exists('DesaExcelKat6',$output)) $DesaExcelKat6 = $output['DesaExcelKat6'];
-	if (array_key_exists('DesaExcelKat7',$output)) $DesaExcelKat7 = $output['DesaExcelKat7'];
-	if (array_key_exists('DesaExcelKat8',$output)) $DesaExcelKat8 = $output['DesaExcelKat8'];
-	if (array_key_exists('DesaExcelKat9',$output)) $DesaExcelKat9 = $output['DesaExcelKat9'];
-	if (array_key_exists('DesaExcelKat10',$output)) $DesaExcelKat10 = $output['DesaExcelKat10'];
-	if (array_key_exists('DesaExcelKat12',$output)) $DesaExcelKat12 = $output['DesaExcelKat12'];
+	$DesaExcel = $output['DesaExcel'];	
 			
 	// get a reference to the path of PHPExcel classes 
 	$phpExcelPath = Yii::getPathOfAlias('application.third_party.phpexcel');
@@ -283,9 +274,9 @@ if ($output && $output['outputtype']=='xlsx') {
 		->setCategory("Approve by ");
 	
 	// Set column width, varies wheter another category checked or not. if yes, then set it autosize.
-	if (isset($DesaExcelKat3) || isset($DesaExcelKat4) || isset($DesaExcelKat5) || isset($DesaExcelKat6) || 
-	isset($DesaExcelKat7) || isset($DesaExcelKat8) || isset($DesaExcelKat9) || isset($DesaExcelKat10) || 
-	isset($DesaExcelKat12) ) {
+	if (array_key_exists('DesaExcelKat3',$output) || array_key_exists('DesaExcelKat4',$output) || array_key_exists('DesaExcelKat5',$output) || array_key_exists('DesaExcelKat6',$output) || 
+	array_key_exists('DesaExcelKat7',$output) || array_key_exists('DesaExcelKat8',$output) || array_key_exists('DesaExcelKat9',$output) || array_key_exists('DesaExcelKat10',$output) || 
+	array_key_exists('DesaExcelKat12',$output) ) {
 		$excel->getActiveSheet()->getColumnDimension('A')->setWidth(163);
 		$excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 	}
@@ -386,7 +377,7 @@ if ($output && $output['outputtype']=='xlsx') {
 	
 	/*****************************
 	* BEGIN Looping Potensi Data *
-	******************************/
+	******************************/	
 	foreach ($output['potensiR'] as $potensi) {
 		if (array_key_exists("DesaExcelKat$potensi",$output)) {
 			// Give space

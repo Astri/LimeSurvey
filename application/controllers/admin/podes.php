@@ -105,7 +105,7 @@ class Podes extends Survey_Common_Action
 					
 					// Setup Data Model
 					// Setup array containing list of potensi 
-					$output['potensiR'] = array(3,4,5,6,7,8,9,10,12); 					
+					$output['potensiR'] = PotensiField::getField(); 					
 					foreach ($output['potensiR'] as $potensi) {
 						$kat = 'kat'.$potensi;
 						if ($model->$kat) {
@@ -119,9 +119,9 @@ class Podes extends Survey_Common_Action
 									$field = ucfirst($field);
 									array_push($dataDesa,$output["DesaExcelKat$potensi"]->$field);
 								}
-							}							
-							$output["DesaExcelKat$potensi"."Header"] = $potensiForm->getAttributeLabel("kat$potensi");			
+							}																	
 						}
+						$output["DesaExcelKat$potensi"."Header"] = $potensiForm->getAttributeLabel("kat$potensi");
 					}
 					
 					
@@ -199,8 +199,48 @@ class Podes extends Survey_Common_Action
 					'kat8'=>$model->kat8,
 					'kat9'=>$model->kat9,
 					'kat10'=>$model->kat10,
-					'kat12'=>$model->kat12,					
-				);				
+					'kat12'=>$model->kat12,	
+					'outputtype'=>$model->outputtype,
+				);
+				
+				if ($output['outputtype']=='xlsx') {
+					$potensiForm = new PotensiForm;
+					$output['DesaExcels'] = LoadModels('Desa',$output['desaids']);
+					foreach ($output['DesaExcels'] as $DesaExcel) {
+						// Because we are using PHPExcel all data must be reloaded first
+						$dataDesa = array();
+						array_push($dataDesa,
+							$DesaExcel->kecamatan->kabupaten->provinsi->nama,
+							$DesaExcel->kecamatan->kabupaten->nama,
+							$DesaExcel->kecamatan->nama,
+							$DesaExcel->nama
+						);						
+					}
+					
+					// Setup Data Model
+					// Setup array containing list of potensi 
+					$output['potensiR'] = PotensiField::getField(); 					
+					foreach ($output['potensiR'] as $potensi) {
+						$kat = 'kat'.$potensi;
+						foreach ($output['desaids'] as $desaid) {
+							$output["DesaExcel$desaid"] = $desaid;
+							if ($model->$kat) {
+									$output["DesaExcel$desaid"."Kat$potensi"] = loadModel("PotensiR$potensi",$desaid);
+									$output["DesaExcel$desaid"."Kat$potensi"."Field"] = PotensiField::getKat($potensi);
+									foreach ($output["DesaExcel$desaid"."Kat$potensi"."Field"] as $field) {		
+										if (ctype_lower(substr($field,0,1))) {								
+											array_push($dataDesa,$output["DesaExcel$desaid"."Kat$potensi"]->$field->nama);
+										} else {
+											// Convert first character back to Capital
+											$field = ucfirst($field);
+											array_push($dataDesa,$output["DesaExcel$desaid"."Kat$potensi"]->$field);
+										}										
+									}
+							}						
+						}
+						$output["DesaExcelKat$potensi"."Header"] = $potensiForm->getAttributeLabel("kat$potensi");
+					}
+				}
 			}
 		}
 
