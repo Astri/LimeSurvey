@@ -253,6 +253,71 @@ class Podes extends Survey_Common_Action
 		$this->_renderWrappedTemplate('podes', 'compare', $aData);
 	}
 	
+	/**
+    * This function show form to add podes data (provinsi, kabupaten, kecamatan, desa)
+	* TODO: Add Permission
+	*       Add link from admin page       
+    */
+    function add() 
+    {		
+		// Load podes helper function
+		Yii::app()->loadHelper('admin/podes');
+		$output = false;
+		
+		// Load Provinsi, Kabupaten, Kecamatan and Desa Dynamic Class
+		$provinsi = new ProvinsiDynamic;
+		$kabupaten = new KabupatenDynamic;
+		$kecamatan = new KecamatanDynamic;
+		$desa = new DesaDynamic;
+		
+		
+		
+		if (isset($_POST['ProvinsiDynamic'])) {
+			$provinsi->attributes=$_POST['ProvinsiDynamic'];			
+			
+			if ($provinsi->validate()) {
+				if ($provinsi->save()) { // Berhasil di save
+					$namaProvinsi = $provinsi->nama;
+					$successmessage = "<strong>Success!</strong> Provinsi $namaProvinsi berhasil di simpan!";
+					$provinsi->unsetAttributes();
+				}
+			}			
+		}
+		
+		if (isset($_POST['KabupatenDynamic'])) {
+			$kabupaten->attributes=$_POST['KabupatenDynamic'];			
+			
+			if ($kabupaten->validate()) {
+				if ($kabupaten->save()) { // Berhasil di save
+					$namaKabupaten = $kabupaten->nama;
+					$successmessage = "<strong>Success!</strong> Provinsi $namaKabupaten berhasil di simpan!";
+					$kabupaten->unsetAttribute();
+				}
+			}			
+		}
+		
+        /* if (!hasGlobalPermission('USER_RIGHT_CREATE_SURVEY'))
+            $this->getController()->error('No permission'); */   
+			
+		// Load Podes css and JS
+		$this->getController()->_css_admin_includes(Yii::app()->getConfig('adminstyleurl')."podes.css");
+        $this->getController()->_js_admin_includes(Yii::app()->getConfig('adminscripts') . 'podes.js');
+		
+		if (isset($successmessage)) {
+			$output['successmessage'] = $successmessage;
+		}
+		
+		$output['provinsi']=$provinsi;
+		$output['kabupaten']=$kabupaten;
+		$output['kecamatan']=$kecamatan;
+		$output['desa']=$desa;
+		
+		$aData['output'] = $output;
+		
+        $this->_renderWrappedTemplate('podes', 'add', $aData);
+		
+	}
+	
     /**
     * Renders template(s) wrapped in header and footer
     *

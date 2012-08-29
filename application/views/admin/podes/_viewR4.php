@@ -1,4 +1,4 @@
-<?php $this->widget('bootstrap.widgets.BootDetailView',array(
+<?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
 	'attributes'=>array(
 		array(

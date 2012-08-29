@@ -43,13 +43,13 @@
             echo CHtml::image($seperator['src'], $seperator['alt'], $seperator['options']);
             echo CHtml::link(CHtml::image($view['src'], $view['alt']), $this->createURL('admin/podes/index'));
             echo CHtml::link(CHtml::image($compare['src'], $compare['alt']), $this->createURL('admin/podes/compare'));         
-            echo CHtml::link(CHtml::image($add['src'], $add['alt']), $this->createURL('admin/podes/index'));
+            echo CHtml::link(CHtml::image($add['src'], $add['alt']), $this->createURL('admin/podes/add'));
             ?>
         </div>	
     </div>    
 </div>
 
-<?php $form=$this->beginWidget('bootstrap.widgets.BootActiveForm', array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'potensi-form-index-form',
 	'enableAjaxValidation'=>true,
     'enableClientValidation'=>true,
@@ -177,7 +177,7 @@
 						<li>
 				
 				<div align="center"> 
-					<?php echo CHtml::submitButton('Submit'); ?>
+					<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Submit')); ?>
 				</div>
 				</li>
 			</fieldset>
